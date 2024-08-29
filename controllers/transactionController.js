@@ -1,3 +1,5 @@
+import Transaction from "../models/transactionModel.js";
+
 export const addTransaction = async (req, res) => {
   try {
     const transaction = new Transaction({
