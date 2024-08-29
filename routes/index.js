@@ -7,6 +7,7 @@ import transactionRoutes from './transactionRoutes.js';
 import investments from './investmentsRoutes.js';
 import financialAdvice from './financialAdviceRoutes.js';
 import insurancePolicy from './insurancePolicyRoutes.js';
+import  financialChatbot  from './financialChatbotRoutes.js';
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.use('/api/transactions', transactionRoutes);
 router.use('/api/investments', investments);
 router.use('/api/financial-advice', financialAdvice);
 router.use('/api/insurance-policies', insurancePolicy);
+router.use('/api/financial-chatbot',financialChatbot );
 
 export default router;
