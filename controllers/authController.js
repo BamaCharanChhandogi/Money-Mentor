@@ -13,6 +13,7 @@ export const register = async (req, res) => {
       name,
       email,
       password,
+      phone,  // Add this line if you're collecting phone numbers
       dateOfBirth,
       occupation,
       annualIncome,
@@ -23,7 +24,7 @@ export const register = async (req, res) => {
       healthConditions,
     } = req.body;
     if (!name || !email || !password) {
-      return res.status(400).json({ msg: "Please fill all fields" });
+      return res.status(400).json({ msg: "Please fill all required fields" });
     }
     const userExists = await Users.findOne({ email });
     if (userExists) {
@@ -37,6 +38,7 @@ export const register = async (req, res) => {
       name,
       email,
       password: hashPassword,
+      phone,  // Add this line if you're collecting phone numbers
       dateOfBirth,
       occupation,
       annualIncome,
@@ -48,8 +50,6 @@ export const register = async (req, res) => {
       otp,
       otpExpires,
     });
-    // Different way to create user
-    // const user = await Users.create({name:name+"charan",email,password});
 
     const token = await createJWT(user?.id);
     await user.save();

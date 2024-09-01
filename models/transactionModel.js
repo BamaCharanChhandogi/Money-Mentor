@@ -27,7 +27,6 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  // This would be the transaction ID provided by the banking API
   externalId: {
     type: String,
     required: true
