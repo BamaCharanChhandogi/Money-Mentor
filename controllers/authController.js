@@ -128,3 +128,59 @@ export const verifyOTP = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+export const logout = async (req, res) => {
+  try {
+    res.status(200).json({ success: true, message: "User logged out" });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+export const getUser = async (req, res) => {
+  try {
+    const user = await Users.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    res.status(200).json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+export const updateUser = async (req, res) => {
+  try {
+    const user = await Users.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    const { name, email, phone, dateOfBirth, occupation, annualIncome, maritalStatus, dependents, ownHome, ownCar, healthConditions } = req.body;
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.dateOfBirth = dateOfBirth || user.dateOfBirth;
+    user.occupation = occupation || user.occupation;
+    user.annualIncome = annualIncome || user.annualIncome;
+    user.maritalStatus = maritalStatus || user.maritalStatus;
+    user.dependents = dependents || user.dependents;
+    user.ownHome = ownHome || user.ownHome;
+    user.ownCar = ownCar || user.ownCar;
+    user.healthConditions = healthConditions || user.healthConditions;
+    await user.save();
+    res.status(200).json({ success: true, user });
+  }
+  catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+}
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await Users.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    await user.deleteOne();
+    res.status(200).json({ success: true, message: "User deleted" });
+  }
+  catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+}
