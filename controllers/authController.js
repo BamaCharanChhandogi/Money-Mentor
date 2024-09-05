@@ -13,7 +13,7 @@ export const register = async (req, res) => {
       name,
       email,
       password,
-      phone,  // Add this line if you're collecting phone numbers
+      phone,
       dateOfBirth,
       occupation,
       annualIncome,
@@ -23,22 +23,34 @@ export const register = async (req, res) => {
       ownCar,
       healthConditions,
     } = req.body;
+
     if (!name || !email || !password) {
       return res.status(400).json({ msg: "Please fill all required fields" });
     }
+
+    // Validate the password here
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        msg: "Password must contain at least one number, one uppercase letter, one lowercase letter, and be between 8 and 16 characters long.",
+      });
+    }
+
     const userExists = await Users.findOne({ email });
     if (userExists) {
       return res.status(400).json({ msg: "User already exists" });
     }
+
     const otp = generateOTP();
     const otpExpires = Date.now() + 10 * 60 * 1000;
     sendOTPEmail(email, otp);
-    const hashPassword = await hashString(password);
+
+    const hashPassword = await hashString(password);  // Hash the validated password
     const user = new Users({
       name,
       email,
       password: hashPassword,
-      phone,  // Add this line if you're collecting phone numbers
+      phone,
       dateOfBirth,
       occupation,
       annualIncome,
@@ -64,6 +76,7 @@ export const register = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
