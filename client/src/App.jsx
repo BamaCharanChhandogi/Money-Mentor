@@ -11,6 +11,12 @@ import ExpenseDashboard from "./components/Expenses/Expenses";
 import Register from "./pages/Register";
 import Verify from "./components/Verify";
 import Profile from "./pages/profile";
+import PlaidIntegration from "./components/BankAccount/Plaid";
+import Chatbot from "./components/ChatBot/Gemini";
+import FinancialAdvice from './components/FinancialAdvice';
+import ExpenseAnalysis from './components/ExpenseAnalysis';
+import BudgetAdherence from './components/BudgetAdherence';
+import Dashboard from "./pages/FinanceAdvise";
 
 function App() {
   return (
@@ -22,6 +28,7 @@ function App() {
         <Route path="/services" element={<Service />} />
         <Route path="/services/expenses" element={<ExpenseDashboard />} />
         <Route path="/services/budgets" element={<BudgetDashboard />} />
+        <Route path="/services/bank-accounts" element={<PlaidIntegration />} />
         {/* Add routes for other feature pages */}
         <Route path="/service" element={<Service />} />
         <Route path="/about" element={<About />} />
@@ -30,9 +37,17 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/profile" element={<Profile />} />
+
+        {/*  */}
+
+        <Route path="/ai-dashboard" element={<Dashboard />} />
+        <Route path="/financial-advice" element={<FinancialAdvice />} />
+          <Route path="/expense-analysis" element={<ExpenseAnalysis />} />
+          <Route path="/budget-adherence" element={<BudgetAdherence />} />
       </Routes>
       </div>
-      <Footer />
+      <Chatbot />
+      {/* <Footer /> */}
     </>
   );
 }

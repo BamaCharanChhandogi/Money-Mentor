@@ -13,7 +13,9 @@ export const addBankAccount = async(req,res)=>{
 };
 export const getBankAccount = async(req,res)=>{
   try {
-    const bankAccounts = await BankAccount.find({ user: req.user._id });
+    const bankAccounts = await BankAccount.find({ userId: req.user._id });
+    console.log(req.user._id);
+    
     res.send(bankAccounts);
   } catch (error) {
     res.status(500).send();
@@ -21,7 +23,7 @@ export const getBankAccount = async(req,res)=>{
 };
 export const getBankAccountById = async(req,res)=>{
   try {
-    const bankAccount = await BankAccount.findOne({ _id: req.params.id, user: req.user._id });
+    const bankAccount = await BankAccount.findOne({ _id: req.params.id, userId: req.user._id });
     if (!bankAccount) {
       return res.status(404).send();
     }
@@ -40,7 +42,7 @@ export const updateBankAccount = async(req,res)=>{
   }
 
   try {
-    const bankAccount = await BankAccount.findOne({ _id: req.params.id, user: req.user._id });
+    const bankAccount = await BankAccount.findOne({ _id: req.params.id, userId: req.user._id });
     if (!bankAccount) {
       return res.status(404).send();
     }
@@ -55,7 +57,7 @@ export const updateBankAccount = async(req,res)=>{
 };
 export const deleteBankAccount = async(req,res)=>{
   try {
-    const bankAccount = await BankAccount.findOneAndDelete({ _id: req.params.id, user: req.user._id });
+    const bankAccount = await BankAccount.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
     if (!bankAccount) {
       return res.status(404).send();
     }

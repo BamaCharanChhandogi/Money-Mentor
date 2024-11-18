@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = 'http://localhost:5000/api';
+export const BASE_URL = 'http://localhost:5000/api';
+const token = localStorage.getItem('token');
 
 export const login = async (email, password) => {
   try {
@@ -34,6 +35,7 @@ export const verifyOTP = async (data) => {
 
 export const fetchUser = async () => {
   const token = localStorage.getItem('token');
+  
   const response = await axios.get(`${BASE_URL}/auth/get-user`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -43,8 +45,6 @@ export const fetchUser = async () => {
 };
 // edit user profile
 export const editUser = async (data) => {
-  console.log(data);
-  
   const token = localStorage.getItem('token');
   const response = await axios.patch(`${BASE_URL}/auth/update-user`, data, {
     headers: {

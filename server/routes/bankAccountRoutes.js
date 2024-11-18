@@ -4,7 +4,7 @@ import { addBankAccount, deleteBankAccount, getBankAccount, getBankAccountById, 
 
 const router = express.Router();
 
-router.post('/',auth,addBankAccount);
+// router.post('/',auth,addBankAccount);
 router.get('/',auth,getBankAccount);
 router.get('/:id',auth,getBankAccountById);
 router.patch('/:id',auth,updateBankAccount);

@@ -61,12 +61,12 @@ function Services() {
                 Link your bank accounts for real-time transaction import.
                 Automatically categorize transactions with AI-driven insights.
               </p>
-              <a
-                href="#bank-integration"
-                className="text-purple-600 hover:text-purple-800 transition duration-300"
+              <Link
+                to="/services/bank-accounts"
+                className="text-green-600 hover:text-green-800 transition duration-300"
               >
-                Learn More &rarr;
-              </a>
+                Connect Bank Account &rarr;
+              </Link>
             </div>
 
             {/* Investment Portfolio Tracking */}
@@ -97,12 +97,9 @@ function Services() {
                 Get personalized financial advice powered by AI. Receive
                 tailored recommendations for savings and investment strategies.
               </p>
-              <a
-                href="#ai-advice"
-                className="text-yellow-600 hover:text-yellow-800 transition duration-300"
-              >
-                Learn More &rarr;
-              </a>
+              <Link to="/ai-dashboard">
+                Get Advice &rarr;
+              </Link>
             </div>
 
             {/* Secure Data Handling */}

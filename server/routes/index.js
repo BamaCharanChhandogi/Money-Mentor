@@ -8,6 +8,7 @@ import investments from './investmentsRoutes.js';
 import financialAdvice from './financialAdviceRoutes.js';
 import insurancePolicy from './insurancePolicyRoutes.js';
 import  financialChatbot  from './financialChatbotRoutes.js';
+import plaidRoutes  from './plaidRoutes.js';
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/api/investments', investments);
 router.use('/api/financial-advice', financialAdvice);
 router.use('/api/insurance-policies', insurancePolicy);
 router.use('/api/financial-chatbot',financialChatbot );
+router.use('/api/plaid',plaidRoutes );
 
 export default router;

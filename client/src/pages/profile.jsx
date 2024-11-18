@@ -21,6 +21,7 @@ const Profile = () => {
         setUser(userData.user);
         setFormData(userData.user); // Initialize form data with user data
       } catch (err) {
+        navigate("/login");
         setError("Failed to load user data");
       } finally {
         setLoading(false);
@@ -33,7 +34,6 @@ const Profile = () => {
   const handleLogout = () => {
     dispatch(logoutSuccess());
     localStorage.removeItem("token"); // Remove token from localStorage
-    localStorage.removeItem("user"); // Remove user from localStorage
     // reload
     navigate("/login");
     window.location.reload();

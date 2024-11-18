@@ -6,21 +6,24 @@ import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Select, { SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/Select';
 import Alert, { AlertCircle, AlertTitle, AlertDescription } from '../ui/Alert';
+import { useSelector } from 'react-redux';
+import { BASE_URL } from '../../api';
 
 const BudgetDashboard = () => {
   const [budgets, setBudgets] = useState([]);
   const [newBudget, setNewBudget] = useState({ category: '', amount: '', period: 'monthly' });
   const [error, setError] = useState('');
-
+  const token=useSelector(state=>state.auth.token);
+  
   useEffect(() => {
     fetchBudgets();
   }, []);
 
   const fetchBudgets = async () => {
     try {
-      const response = await fetch('/api/budgets', {
+      const response = await fetch(`${BASE_URL}/budgets`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}` // Assume token is stored in localStorage
+          'Authorization': `Bearer ${token}` // Assume token is stored in localStorage
         }
       });
       if (!response.ok) throw new Error('Failed to fetch budgets');
@@ -42,11 +45,11 @@ const BudgetDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/budgets', {
+      const response = await fetch(`${BASE_URL}/budgets`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(newBudget)
       });

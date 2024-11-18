@@ -5,6 +5,7 @@ import ExpenseForm from './ExpenseForm';
 import ExpenseList from './ExpenseList';
 import Alert from '../ui/Alert';
 import { AlertCircle, AlertTitle, AlertDescription } from '../ui/Alert';
+import { BASE_URL } from '../../api/index';
 
 const ExpenseDashboard = () => {
   const [expenses, setExpenses] = useState([]);
@@ -17,7 +18,7 @@ const ExpenseDashboard = () => {
 
   const fetchExpenses = async () => {
     try {
-      const response = await fetch('/api/expenses', {
+      const response = await fetch(`${BASE_URL}/expenses`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -32,7 +33,7 @@ const ExpenseDashboard = () => {
 
   const handleAddExpense = async (expenseData) => {
     try {
-      const response = await fetch('/api/expenses', {
+      const response = await fetch(`${BASE_URL}/expenses`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ const ExpenseDashboard = () => {
 
   const handleEditExpense = async (expenseData) => {
     try {
-      const response = await fetch(`/api/expenses/${currentExpense._id}`, {
+      const response = await fetch(`${BASE_URL}/expenses/${currentExpense._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ const ExpenseDashboard = () => {
 
   const handleDeleteExpense = async (id) => {
     try {
-      const response = await fetch(`/api/expenses/${id}`, {
+      const response = await fetch(`${BASE_URL}/expenses/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,

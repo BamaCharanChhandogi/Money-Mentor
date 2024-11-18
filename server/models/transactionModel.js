@@ -1,15 +1,19 @@
-import mongoose from "mongoose";
-
-const transactionSchema = new mongoose.Schema({
-  user: {
+import mongoose from 'mongoose';
+const TransactionSchema = new mongoose.Schema({
+  accountId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
+    ref: 'Account',
+    required: true
   },
-  bankAccount: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  plaidTransactionId: {
+    type: String,
     required: true,
-    ref: 'BankAccount'
+    unique: true
   },
   amount: {
     type: Number,
@@ -19,19 +23,21 @@ const transactionSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  description: {
-    type: String,
-    required: true
-  },
-  category: {
-    type: String,
-    required: true
-  },
-  externalId: {
-    type: String,
-    required: true
+  name: String,
+  merchantName: String,
+  category: [String],
+  pending: Boolean,
+  paymentChannel: String,
+  location: {
+    address: String,
+    city: String,
+    region: String,
+    postalCode: String,
+    country: String,
+    lat: Number,
+    lon: Number
   }
-});
+}, { timestamps: true });
 
-const Transactions = mongoose.model('Transaction', transactionSchema);
-export default Transactions;
+const Transaction = mongoose.model('Transaction', TransactionSchema);
+export default Transaction;

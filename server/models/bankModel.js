@@ -1,37 +1,38 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const bankAccountSchema = new mongoose.Schema({
-  user: {
+const AccountSchema = new mongoose.Schema({
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
-  accountName: {
+  plaidAccountId: {
     type: String,
     required: true
   },
-  accountType: {
+  accessToken: {
     type: String,
     required: true
   },
+  itemId: {
+    type: String,
+    required: true
+  },
+  institutionId: String,
+  institutionName: String,
+  accountName: String,
+  accountType: String,
+  accountSubtype: String,
   balance: {
-    type: Number,
-    required: true
+    available: Number,
+    current: Number,
+    limit: Number
   },
-  institution: {
-    type: String,
-    required: true
-  },
-  accountNumber: {
-    type: String,
-    required: true
-  },
-  // This would be the token or ID provided by the banking API
-  externalId: {
-    type: String,
-    required: true
+  lastUpdated: {
+    type: Date,
+    default: Date.now
   }
-});
+}, { timestamps: true });
 
-const BankAccounts = mongoose.model('BankAccount', bankAccountSchema);
-export default BankAccounts;
+const Account = mongoose.model('Account', AccountSchema);
+export default Account;

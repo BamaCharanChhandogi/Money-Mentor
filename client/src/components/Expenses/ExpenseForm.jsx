@@ -67,7 +67,7 @@ const ExpenseForm = ({ expense, onSubmit, onCancel }) => {
         onChange={handleChange}
         placeholder="Description"
       />
-      <Button type="submit">Save Expense</Button>
+      <Button type="submit" onClick={handleSubmit}>Save Expense</Button>
       <Button type="button" onClick={onCancel} className="bg-gray-500">Cancel</Button>
     </form>
   );
