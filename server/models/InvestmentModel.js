@@ -8,7 +8,9 @@ const investmentSchema = new mongoose.Schema({
   },
   symbol: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    uppercase: true
   },
   name: {
     type: String,
@@ -17,15 +19,17 @@ const investmentSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['stock', 'bond', 'etf', 'mutual_fund', 'crypto']
+    enum: ['stock', 'bond', 'etf', 'mutual_fund', 'crypto', 'real_estate']
   },
   quantity: {
     type: Number,
-    required: true
+    required: true,
+    min: [0, 'Quantity cannot be negative']
   },
   purchasePrice: {
     type: Number,
-    required: true
+    required: true,
+    min: [0, 'Purchase price cannot be negative']
   },
   purchaseDate: {
     type: Date,
@@ -38,9 +42,90 @@ const investmentSchema = new mongoose.Schema({
   lastUpdated: {
     type: Date,
     default: Date.now
-  }
+  },
+  marketData: {
+    marketCap: Number,
+    peRatio: Number,
+    dividendYield: Number,
+    fiftyTwoWeekHigh: Number,
+    fiftyTwoWeekLow: Number
+  },
+  performanceMetrics: {
+    totalReturn: Number,
+    annualizedReturn: Number,
+    volatility: Number
+  },
+  alerts: [{
+    type: {
+      type: String,
+      enum: ['price_change', 'market_milestone', 'performance_threshold']
+    },
+    threshold: Number,
+    message: String,
+    triggered: {
+      type: Boolean,
+      default: false
+    },
+    triggeredAt: Date
+  }],
+  notes: [String]
+}, { 
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
-const Investments=mongoose.model('Investment', investmentSchema);
+// Virtual for calculating current value
+investmentSchema.virtual('currentValue').get(function() {
+  return this.quantity * this.currentPrice;
+});
 
-export default Investments;
+// Virtual for calculating total gain/loss
+investmentSchema.virtual('totalGainLoss').get(function() {
+  return this.currentValue - (this.quantity * this.purchasePrice);
+});
+
+// Virtual for calculating percentage return
+investmentSchema.virtual('percentageReturn').get(function() {
+  return ((this.currentValue - (this.quantity * this.purchasePrice)) / (this.quantity * this.purchasePrice)) * 100;
+});
+
+// Method to add performance alert
+investmentSchema.methods.addAlert = function(type, threshold, message) {
+  this.alerts.push({
+    type,
+    threshold,
+    message,
+    triggered: false
+  });
+  return this.save();
+};
+
+// Method to check and trigger alerts
+investmentSchema.methods.checkAlerts = function() {
+  this.alerts.forEach(alert => {
+    if (!alert.triggered) {
+      let shouldTrigger = false;
+      
+      switch(alert.type) {
+        case 'price_change':
+          shouldTrigger = Math.abs(this.percentageReturn) >= alert.threshold;
+          break;
+        case 'market_milestone':
+          shouldTrigger = this.currentPrice >= alert.threshold;
+          break;
+      }
+
+      if (shouldTrigger) {
+        alert.triggered = true;
+        alert.triggeredAt = new Date();
+      }
+    }
+  });
+
+  return this.save();
+};
+
+const Investment = mongoose.model('Investment', investmentSchema);
+
+export default Investment;

@@ -1,7 +1,44 @@
-export async function getStockPrice(symbol) {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Return a random price between 50 and 200
-    return Math.random() * (200 - 50) + 50;
+import axios from 'axios';
+
+// export const getStockPrice = async (symbol) => {
+//   try {
+//     const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`, {
+//       params: {
+//         region: 'US',
+//         interval: '1d',
+//         range: '1d'
+//       }
+//     });
+
+//     const quote = response.data.chart.result[0];
+//     return quote.meta.regularMarketPrice;
+//   } catch (error) {
+//     console.error(`Error fetching price for ${symbol}:`, error);
+//     throw new Error('Unable to fetch stock price');
+//   }
+// };
+
+export const getStockDetails = async (symbol) => {
+  try {
+    const response = await axios.get(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`, {
+      params: {
+        region: 'US',
+        interval: '1d',
+        range: '1mo'
+      }
+    });
+
+    const quote = response.data.chart.result[0];
+    return {
+      symbol,
+      currentPrice: quote.meta.regularMarketPrice,
+      previousClose: quote.meta.previousClose,
+      fiftyTwoWeekHigh: quote.meta.fiftyTwoWeekHigh,
+      fiftyTwoWeekLow: quote.meta.fiftyTwoWeekLow,
+      marketCap: quote.meta.marketCap
+    };
+  } catch (error) {
+    console.error(`Error fetching details for ${symbol}:`, error);
+    throw new Error('Unable to fetch stock details');
   }
+};

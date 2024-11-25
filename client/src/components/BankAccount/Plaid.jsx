@@ -220,7 +220,7 @@ const PlaidIntegration = () => {
 
   const handleSync = async (accountId) => {
     try {
-      await plaidApi.syncTransactions(accountId);
+      await plaidApi.syncTransactions(yy);
       setToastMessage({ text: "Transactions synchronized successfully", type: "success" });
       await fetchAccounts(); // Refresh account data after sync
     } catch (error) {

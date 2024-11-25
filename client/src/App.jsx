@@ -17,6 +17,7 @@ import FinancialAdvice from './components/FinancialAdvice';
 import ExpenseAnalysis from './components/ExpenseAnalysis';
 import BudgetAdherence from './components/BudgetAdherence';
 import Dashboard from "./pages/FinanceAdvise";
+import InvestmentTracker from "./components/Investment/InvestmentTracker";
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
         <Route path="/services/expenses" element={<ExpenseDashboard />} />
         <Route path="/services/budgets" element={<BudgetDashboard />} />
         <Route path="/services/bank-accounts" element={<PlaidIntegration />} />
+        {/* investment */}
+        <Route path="/service" element={<Service />} />
+        <Route path="/services/investments" element={<InvestmentTracker />} />
         {/* Add routes for other feature pages */}
         <Route path="/service" element={<Service />} />
         <Route path="/about" element={<About />} />

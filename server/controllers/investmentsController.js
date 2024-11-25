@@ -1,15 +1,28 @@
 import Investment from "../models/InvestmentModel.js";
-import { getStockPrice } from "../services/stockService.js";
+import { getStockDetails } from "../services/stockService.js";
 export const addInvestments = async (req, res) => {
   try {
+    // Fetch additional market data during investment creation
+    const marketDetails = await getStockDetails(req.body.symbol);
+    
     const investment = new Investment({
       ...req.body,
       user: req.user._id,
+      currentPrice: marketDetails.currentPrice || req.body.purchasePrice,
+      marketData: {
+        marketCap: marketDetails.marketCap,
+        fiftyTwoWeekHigh: marketDetails.fiftyTwoWeekHigh,
+        fiftyTwoWeekLow: marketDetails.fiftyTwoWeekLow
+      }
     });
+    
+    // Optionally add default alerts
+    await investment.addAlert('price_change', 10, 'Significant price movement detected');
+    
     await investment.save();
     res.status(201).send(investment);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send(error.message);
   }
 };
 export const getInvestments = async (req, res) => {
@@ -80,55 +93,135 @@ export const getPortfolioSummary = async (req, res) => {
   try {
     const investments = await Investment.find({ user: req.user._id });
 
-    let totalValue = 0;
-    let totalCost = 0;
-    let performanceSummary = [];
-
-    investments.forEach((investment) => {
-      const currentValue = investment.quantity * investment.currentPrice;
-      const cost = investment.quantity * investment.purchasePrice;
-      const profit = currentValue - cost;
-      const percentageReturn = ((currentValue - cost) / cost) * 100;
-
-      totalValue += currentValue;
-      totalCost += cost;
-
-      performanceSummary.push({
-        symbol: investment.symbol,
-        currentValue,
-        cost,
-        profit,
-        percentageReturn,
-      });
-    });
-
-    const overallPerformance = {
-      totalValue,
-      totalCost,
-      totalProfit: totalValue - totalCost,
-      overallReturn: ((totalValue - totalCost) / totalCost) * 100,
+    const summary = {
+      totalInvestments: investments.length,
+      assetAllocation: {},
+      performanceSummary: {
+        totalValue: 0,
+        totalCost: 0,
+        totalGainLoss: 0,
+        overallReturn: 0
+      },
+      alertsSummary: {
+        totalAlerts: 0,
+        triggeredAlerts: 0
+      }
     };
 
-    res.send({ performanceSummary, overallPerformance });
+    investments.forEach(investment => {
+      // Asset Allocation
+      summary.assetAllocation[investment.type] = 
+        (summary.assetAllocation[investment.type] || 0) + investment.currentValue;
+
+      // Performance Summary
+      summary.performanceSummary.totalValue += investment.currentValue;
+      summary.performanceSummary.totalCost += investment.quantity * investment.purchasePrice;
+      
+      // Alerts Summary
+      summary.alertsSummary.totalAlerts += investment.alerts.length;
+      summary.alertsSummary.triggeredAlerts += investment.alerts.filter(a => a.triggered).length;
+    });
+
+    // Calculate Overall Return
+    summary.performanceSummary.totalGainLoss = 
+      summary.performanceSummary.totalValue - summary.performanceSummary.totalCost;
+    summary.performanceSummary.overallReturn = 
+      (summary.performanceSummary.totalGainLoss / summary.performanceSummary.totalCost) * 100;
+
+    res.send(summary);
   } catch (error) {
-    res.status(500).send();
+    res.status(500).send(error.message);
+  }
+};
+
+export const addInvestmentAlert = async (req, res) => {
+  try {
+    const { investmentId, type, threshold, message } = req.body;
+    
+    const investment = await Investment.findOne({
+      _id: investmentId,
+      user: req.user._id
+    });
+
+    if (!investment) {
+      return res.status(404).send('Investment not found');
+    }
+
+    await investment.addAlert(type, threshold, message);
+    res.status(201).send(investment);
+  } catch (error) {
+    res.status(400).send(error.message);
   }
 };
 // update price
 export const updatePrice = async (req, res) => {
   try {
-    const investments = await Investment.find({ user: req.user._id });
+    console.log(req.body);
     
+    const investments = await Investment.find({ user: req.user._id });
+    const updatedInvestments = [];
+
     for (let investment of investments) {
-      const currentPrice = await getStockPrice(investment.symbol);
-      console.log(`Updating price for ${investment.symbol} to ${currentPrice}`);
-      investment.currentPrice = currentPrice;
-      investment.lastUpdated = new Date();
-      await investment.save();
+      try {
+        // Get latest stock details
+        const stockDetails = await getStockDetails(investment.symbol);
+        console.log(stockDetails);
+        
+        
+        // Calculate basic performance metrics
+        const totalReturn = ((stockDetails.currentPrice - investment.purchasePrice) / investment.purchasePrice) * 100;
+        const daysSincePurchase = (new Date() - new Date(investment.purchaseDate)) / (1000 * 60 * 60 * 24);
+        const annualizedReturn = (totalReturn / daysSincePurchase) * 365;
+
+        // Update the investment with available data
+        investment.currentPrice = stockDetails.currentPrice;
+        investment.lastUpdated = new Date();
+        
+        // Update marketData with available fields
+        investment.marketData = {
+          marketCap: stockDetails.marketCap,
+          fiftyTwoWeekHigh: stockDetails.fiftyTwoWeekHigh,
+          fiftyTwoWeekLow: stockDetails.fiftyTwoWeekLow,
+          // Set other fields to null or previous values if not available
+          peRatio: investment.marketData?.peRatio || null,
+          dividendYield: investment.marketData?.dividendYield || null
+        };
+
+        // Update performance metrics
+        investment.performanceMetrics = {
+          totalReturn: totalReturn,
+          annualizedReturn: annualizedReturn,
+          volatility: null // Not available from current API
+        };
+
+        // Check for any price-based alerts
+        await investment.checkAlerts();
+        
+        // Save the updated investment
+        const updatedInvestment = await investment.save();
+        updatedInvestments.push({
+          symbol: investment.symbol,
+          newPrice: stockDetails.currentPrice,
+          priceChange: stockDetails.currentPrice - investment.currentPrice
+        });
+
+      } catch (error) {
+        console.error(`Error updating ${investment.symbol}:`, error);
+        // Continue with next investment if one fails
+        continue;
+      }
     }
 
-    res.send({ message: 'Investment prices updated successfully' });
+    res.send({ 
+      message: 'Investment prices and metrics updated successfully',
+      updatedCount: updatedInvestments.length,
+      updates: updatedInvestments
+    });
   } catch (error) {
-    res.status(500).send();
+    console.error('Error in bulk update:', error);
+    res.status(500).send({
+      error: 'Error updating investment prices',
+      details: error.message
+    });
   }
 };

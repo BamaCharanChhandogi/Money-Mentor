@@ -79,12 +79,12 @@ function Services() {
                 Monitor your investments in stocks, bonds, crypto, and more.
                 Analyze performance with detailed insights and visualizations.
               </p>
-              <a
-                href="#investment-tracking"
+              <Link
+                to="/services/investments"
                 className="text-pink-600 hover:text-pink-800 transition duration-300"
               >
-                Learn More &rarr;
-              </a>
+                Track Investments &rarr;
+              </Link>
             </div>
 
             {/* AI-driven Financial Advice */}
