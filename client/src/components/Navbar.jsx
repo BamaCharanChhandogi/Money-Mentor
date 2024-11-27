@@ -1,23 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-
 import { FaUser } from "react-icons/fa";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated } = useSelector((state) => state.auth);
 
-
   return (
-    <nav className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-4 fixed w-full top-0 shadow-2xl z-50">
+    <nav className="bg-gradient-to-r from-green-500 via-blue-400 to-green-500 p-4 fixed w-full top-0 shadow-2xl z-50">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
+        {/* Logo with Icon */}
         <Link
           to="/"
-          className="text-white text-2xl font-extrabold tracking-widest"
+          className="text-white text-2xl font-extrabold tracking-widest flex items-center"
         >
-          Money-Mentor
+          𝕄𝕠𝕟𝕖𝕪 𝕄𝕖𝕟𝕥𝕠𝕣
         </Link>
 
         {/* Nav Links */}
@@ -46,12 +44,12 @@ function Navbar() {
           >
             Contact
           </Link>
+          {/* Removed the right corner FaUser icon */}
           {isAuthenticated ? (
             <>
-              <Link to="/profile" className="flex items-center justify-center">
-                <FaUser className="text-2xl" />
-              </Link>
-            </>
+            <Link to="/profile" className="flex items-center justify-center">
+            <FaUser className="text-2xl" />
+            </Link></>
           ) : (
             <Link
               to="/login"
@@ -115,13 +113,8 @@ function Navbar() {
             >
               Contact
             </Link>
-            {isAuthenticated ? (
-              <>
-                <Link to="/profile" className="flex items-center justify-center">
-                <FaUser className="text-2xl" />
-              </Link>
-              </>
-            ) : (
+            {/* Removed the FaUser icon for the mobile menu */}
+            {isAuthenticated ? null : (
               <Link
                 to="/login"
                 className="text-white hover:text-yellow-400 transition duration-300 ease-in-out"

@@ -23,7 +23,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <div style={{ paddingTop: '60px', paddingBottom: '60px' }}>
+      <div style={{ paddingTop: '60px' }}>
       <Routes >
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Service />} />
@@ -51,7 +51,7 @@ function App() {
       </Routes>
       </div>
       <Chatbot />
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

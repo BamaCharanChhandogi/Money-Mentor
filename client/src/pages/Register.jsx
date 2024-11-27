@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { register } from '../api';
 import { useNavigate } from 'react-router-dom';
+import { User, Mail, Lock, Calendar, Briefcase, DollarSign, Users, Home, Car, Shield } from 'lucide-react';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -44,144 +45,169 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
-        <h2 className="text-3xl font-extrabold mb-6 text-gray-900">Create Your Account</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleRegister} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="name" className="block text-gray-700 font-semibold">Name</label>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-2xl bg-white shadow-2xl rounded-2xl overflow-hidden">
+        <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-6 text-center text-white">
+          <h2 className="text-3xl font-bold tracking-wide">Create Your Account</h2>
+          <p className="text-purple-100 mt-2">Join our platform and unlock your financial potential</p>
+        </div>
+        <form onSubmit={handleRegister} className="p-8 space-y-6">
+          {error && (
+            <div className="bg-red-50 border border-red-300 text-red-600 px-4 py-3 rounded-lg mb-4">
+              {error}
+            </div>
+          )}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
               <input
                 type="text"
-                id="name"
                 name="name"
-                className="mt-1 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Full Name"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 value={formData.name}
                 onChange={handleChange}
                 required
               />
             </div>
-            <div>
-              <label htmlFor="email" className="block text-gray-700 font-semibold">Email</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Mail className="h-5 w-5 text-gray-400" />
+              </div>
               <input
                 type="email"
-                id="email"
                 name="email"
-                className="mt-1 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Email Address"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 value={formData.email}
                 onChange={handleChange}
                 required
               />
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="password" className="block text-gray-700 font-semibold">Password</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Lock className="h-5 w-5 text-gray-400" />
+              </div>
               <input
                 type="password"
-                id="password"
                 name="password"
-                className="mt-1 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Password"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 value={formData.password}
                 onChange={handleChange}
                 required
               />
             </div>
-            <div>
-              <label htmlFor="dateOfBirth" className="block text-gray-700 font-semibold">Date of Birth</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Calendar className="h-5 w-5 text-gray-400" />
+              </div>
               <input
                 type="date"
-                id="dateOfBirth"
                 name="dateOfBirth"
-                className="mt-1 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 value={formData.dateOfBirth}
                 onChange={handleChange}
               />
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="occupation" className="block text-gray-700 font-semibold">Occupation</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Briefcase className="h-5 w-5 text-gray-400" />
+              </div>
               <input
                 type="text"
-                id="occupation"
                 name="occupation"
-                className="mt-1 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Occupation"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 value={formData.occupation}
                 onChange={handleChange}
               />
             </div>
-            <div>
-              <label htmlFor="annualIncome" className="block text-gray-700 font-semibold">Annual Income</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <DollarSign className="h-5 w-5 text-gray-400" />
+              </div>
               <input
                 type="number"
-                id="annualIncome"
                 name="annualIncome"
-                className="mt-1 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Annual Income"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 value={formData.annualIncome}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="maritalStatus" className="block text-gray-700 font-semibold">Marital Status</label>
+          <div className="grid md:grid-cols-2 gap-6 mt-6">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Users className="h-5 w-5 text-gray-400" />
+              </div>
               <input
                 type="text"
-                id="maritalStatus"
                 name="maritalStatus"
-                className="mt-1 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Marital Status"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 value={formData.maritalStatus}
                 onChange={handleChange}
               />
             </div>
-            <div>
-              <label htmlFor="dependents" className="block text-gray-700 font-semibold">Dependents</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Users className="h-5 w-5 text-gray-400" />
+              </div>
               <input
                 type="number"
-                id="dependents"
                 name="dependents"
-                className="mt-1 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Number of Dependents"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 value={formData.dependents}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              id="ownHome"
-              name="ownHome"
-              className="mr-2"
-              checked={formData.ownHome}
-              onChange={handleChange}
-            />
-            <label htmlFor="ownHome" className="text-gray-700 font-semibold">Own Home</label>
+          <div className="flex items-center space-x-6 mt-6">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                name="ownHome"
+                id="ownHome"
+                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                checked={formData.ownHome}
+                onChange={handleChange}
+              />
+              <label htmlFor="ownHome" className="ml-2 block text-sm text-gray-900 flex items-center">
+                <Home className="h-5 w-5 mr-2 text-gray-400" />
+                Own Home
+              </label>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                name="ownCar"
+                id="ownCar"
+                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                checked={formData.ownCar}
+                onChange={handleChange}
+              />
+              <label htmlFor="ownCar" className="ml-2 block text-sm text-gray-900 flex items-center">
+                <Car className="h-5 w-5 mr-2 text-gray-400" />
+                Own Car
+              </label>
+            </div>
           </div>
 
-          <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              id="ownCar"
-              name="ownCar"
-              className="mr-2"
-              checked={formData.ownCar}
-              onChange={handleChange}
-            />
-            <label htmlFor="ownCar" className="text-gray-700 font-semibold">Own Car</label>
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="healthConditions" className="block text-gray-700 font-semibold">Health Conditions</label>
+          <div className="relative mt-6">
+            <div className="absolute top-4 left-0 pl-3 pointer-events-none">
+              <Shield className="h-5 w-5 text-gray-400" />
+            </div>
             <textarea
-              id="healthConditions"
               name="healthConditions"
-              className="mt-1 p-3 w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Health Conditions (Optional)"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none"
               value={formData.healthConditions}
               onChange={handleChange}
             />
@@ -189,15 +215,24 @@ const Register = () => {
 
           <button
             type="submit"
-            className={`w-full p-3 text-white rounded-lg ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'}`}
             disabled={loading}
+            className="w-full mt-6 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 rounded-xl hover:from-purple-600 hover:to-purple-700 transition duration-300 ease-in-out transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-purple-500"
           >
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? 'Registering...' : 'Create Account'}
           </button>
+
+          <div className="mt-6 text-center">
+            <p className="text-gray-600">
+              Already have an account?{' '}
+              <a href="/login" className="text-purple-600 font-semibold hover:underline">
+                Sign In
+              </a>
+            </p>
+          </div>
         </form>
       </div>
     </div>
   );
-};
+}
 
 export default Register;

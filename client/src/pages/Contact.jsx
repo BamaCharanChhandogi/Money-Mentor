@@ -27,7 +27,7 @@ function Contact() {
         });
       };
     return (
-        <div className="bg-gray-100 py-16">
+        <div className="py-16 bg-green-100 p-8">
         <div className="container mx-auto px-4">
           {/* Contact Header */}
           <div className="text-center mb-12">
