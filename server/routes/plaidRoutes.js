@@ -25,6 +25,7 @@ router.post('/exchange-public-token', auth, async (req, res) => {
 router.post('/sync-transactions/:accountId', auth, async (req, res) => {
   try {
     const transactions = await plaidService.syncTransactions(req.user._id, req.params.accountId);
+    
     res.json({ transactions });
   } catch (error) {
     res.status(500).json({ error: error.message });

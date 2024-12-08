@@ -38,7 +38,7 @@ export const updateBudget = async (req, res) => {
   const allowedUpdates = ["category", "amount", "period", "startDate"];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
-  );
+);
 
   if (!isValidOperation) {
     return res.status(400).send({ error: "Invalid updates!" });
@@ -66,6 +66,7 @@ export const deleteBudget = async (req, res) => {
       _id: req.params.id,
       user: req.user._id,
     });
+    
     if (!budget) {
       return res.status(404).send();
     }

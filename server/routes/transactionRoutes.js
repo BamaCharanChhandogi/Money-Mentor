@@ -4,7 +4,7 @@ import { addTransaction, getTransaction, getTransactionById, updateTransaction }
 
 const router = express.Router();
 
-router.post('/',auth,addTransaction);
+// router.post('/',auth,addTransaction);
 router.get('/',auth,getTransaction);
 router.get('/:id',auth,getTransactionById);
 router.patch('/:id',auth,updateTransaction);

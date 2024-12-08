@@ -14,7 +14,6 @@ export const addBankAccount = async(req,res)=>{
 export const getBankAccount = async(req,res)=>{
   try {
     const bankAccounts = await BankAccount.find({ userId: req.user._id });
-    console.log(req.user._id);
     
     res.send(bankAccounts);
   } catch (error) {

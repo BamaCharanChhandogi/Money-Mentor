@@ -41,7 +41,6 @@ const InvestmentTracker = () => {
     fetchInvestments();
     fetchPortfolioSummary();
   }, []);
-console.log(portfolioSummary);
 
   const fetchInvestments = async () => {
     try {

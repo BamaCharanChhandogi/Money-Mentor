@@ -4,50 +4,189 @@ import { Plus, TrendingUp, Wallet, Calendar, Edit, Trash2 } from 'lucide-react';
 
 const ExpenseDashboard = () => {
   const [expenses, setExpenses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
   const [newExpense, setNewExpense] = useState({
     category: '',
     amount: '',
-    date: new Date().toLocaleDateString('en-CA'), // Ensures consistent date format (YYYY-MM-DD)
+    date: new Date().toLocaleDateString('en-CA'),
   });
+  const [editingExpense, setEditingExpense] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Simulated initial data - replace with actual API call
-    const initialExpenses = [
-      { id: 1, category: 'Groceries', amount: 250, date: '2024-02-15' },
-      { id: 2, category: 'Dining Out', amount: 120, date: '2024-02-18' },
-      { id: 3, category: 'Transportation', amount: 75, date: '2024-02-20' },
-    ];
-    setExpenses(initialExpenses);
+    const fetchExpenses = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No authentication token found');
+        }
+
+        const response = await fetch('http://localhost:5000/api/expenses', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch expenses');
+        }
+
+        const data = await response.json();
+        // Ensure data is an array and convert amount to number
+        const processedExpenses = data.map(expense => ({
+          ...expense,
+          amount: Number(expense.amount)
+        }));
+
+        // Sort expenses by date for the chart
+        const sortedExpenses = processedExpenses.sort((a, b) => new Date(a.date) - new Date(b.date));
+        setExpenses(sortedExpenses);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching expenses:', error);
+        setFetchError(error.message);
+        setIsLoading(false);
+      }
+    };
+  
+    fetchExpenses();
   }, []);
 
-  const handleAddExpense = (e) => {
+  const handleAddExpense = async (e) => {
     e.preventDefault();
-
-    // Basic validation
+  
     if (!newExpense.category || !newExpense.amount) {
       setError('Please fill in all fields');
       return;
     }
-
-    const expense = {
-      id: expenses.length + 1,
-      ...newExpense,
-      amount: parseFloat(newExpense.amount),
-    };
-
-    setExpenses([...expenses, expense]);
-    setNewExpense({ category: '', amount: '', date: new Date().toLocaleDateString('en-CA') });
-    setIsModalOpen(false);
-    setError('');
+  
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/expenses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...newExpense,
+          amount: Number(newExpense.amount)
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to add expense');
+      }
+  
+      const addedExpense = await response.json();
+      const updatedExpenses = [...expenses, { ...addedExpense, amount: Number(addedExpense.amount) }]
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      setExpenses(updatedExpenses);
+      setIsModalOpen(false);
+      setNewExpense({ category: '', amount: '', date: new Date().toLocaleDateString('en-CA') });
+      setError('');
+    } catch (error) {
+      setError('Error adding expense');
+      console.error(error);
+    }
   };
 
-  const handleDeleteExpense = (id) => {
-    setExpenses(expenses.filter((expense) => expense.id !== id));
+  const handleEditExpense = async (e) => {
+    e.preventDefault();
+  
+    if (!editingExpense.category || !editingExpense.amount) {
+      setError('Please fill in all fields');
+      return;
+    }
+  
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5000/api/expenses/${editingExpense._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          category: editingExpense.category,
+          amount: Number(editingExpense.amount),
+          date: editingExpense.date
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update expense');
+      }
+  
+      const updatedExpense = await response.json();
+      const updatedExpenses = expenses.map(expense => 
+        expense._id === updatedExpense._id 
+          ? { ...updatedExpense, amount: Number(updatedExpense.amount) }
+          : expense
+      ).sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      setExpenses(updatedExpenses);
+      setIsModalOpen(false);
+      setEditingExpense(null);
+      setError('');
+    } catch (error) {
+      setError('Error updating expense');
+      console.error(error);
+    }
   };
 
-  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const handleDeleteExpense = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`http://localhost:5000/api/expenses/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete expense');
+      }
+  
+      setExpenses(expenses.filter((expense) => expense._id !== id));
+
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+    }
+  };
+
+  const openEditModal = (expense) => {
+    setEditingExpense(expense);
+    setIsModalOpen(true);
+  };
+
+  // Safe total expenses calculation
+  const totalExpenses = Array.isArray(expenses) 
+    ? expenses.reduce((sum, expense) => sum + (expense.amount || 0), 0) 
+    : 0;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        Loading expenses...
+      </div>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-red-500">
+        Error: {fetchError}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-6">
@@ -65,7 +204,11 @@ const ExpenseDashboard = () => {
                 <span className="font-semibold">${totalExpenses.toFixed(2)}</span>
               </div>
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  setEditingExpense(null);
+                  setNewExpense({ category: '', amount: '', date: new Date().toLocaleDateString('en-CA') });
+                  setIsModalOpen(true);
+                }}
                 className="bg-white/20 p-2 rounded-full hover:bg-white/30 transition"
               >
                 <Plus className="text-white" />
@@ -102,7 +245,7 @@ const ExpenseDashboard = () => {
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Expenses</h2>
           {expenses.map((expense) => (
             <div
-              key={expense.id}
+              key={expense._id}
               className="flex justify-between items-center border-b py-3 hover:bg-gray-50 transition"
             >
               <div className="flex items-center space-x-4">
@@ -112,11 +255,14 @@ const ExpenseDashboard = () => {
                 </span>
               </div>
               <div className="flex items-center space-x-2">
-                <button className="text-blue-500 hover:bg-blue-50 p-2 rounded-full">
+                <button 
+                  onClick={() => openEditModal(expense)}
+                  className="text-blue-500 hover:bg-blue-50 p-2 rounded-full"
+                >
                   <Edit size={18} />
                 </button>
                 <button
-                  onClick={() => handleDeleteExpense(expense.id)}
+                  onClick={() => handleDeleteExpense(expense._id)}
                   className="text-red-500 hover:bg-red-50 p-2 rounded-full"
                 >
                   <Trash2 size={18} />
@@ -126,44 +272,62 @@ const ExpenseDashboard = () => {
           ))}
         </div>
 
-        {/* Add Expense Modal */}
+        {/* Add/Edit Expense Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-2xl p-8 w-full max-w-md">
-              <h2 className="text-2xl font-bold mb-6 text-center">Add New Expense</h2>
+              <h2 className="text-2xl font-bold mb-6 text-center">
+                {editingExpense ? 'Edit Expense' : 'Add New Expense'}
+              </h2>
               {error && (
                 <div className="bg-red-50 border border-red-300 text-red-600 px-4 py-3 rounded-lg mb-4">
                   {error}
                 </div>
               )}
-              <form onSubmit={handleAddExpense} className="space-y-4">
+              <form onSubmit={editingExpense ? handleEditExpense : handleAddExpense} className="space-y-4">
                 <input
                   type="text"
                   placeholder="Expense Category"
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  value={newExpense.category}
-                  onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
+                  value={editingExpense ? editingExpense.category : newExpense.category}
+                  onChange={(e) => 
+                    editingExpense 
+                      ? setEditingExpense({ ...editingExpense, category: e.target.value }) 
+                      : setNewExpense({ ...newExpense, category: e.target.value })
+                  }
                   required
                 />
                 <input
                   type="number"
                   placeholder="Expense Amount"
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  value={newExpense.amount}
-                  onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
+                  value={editingExpense ? editingExpense.amount : newExpense.amount}
+                  onChange={(e) => 
+                    editingExpense 
+                      ? setEditingExpense({ ...editingExpense, amount: e.target.value }) 
+                      : setNewExpense({ ...newExpense, amount: e.target.value })
+                  }
                   required
                 />
                 <input
                   type="date"
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  value={newExpense.date}
-                  onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })}
+                  value={editingExpense ? editingExpense.date : newExpense.date}
+                  onChange={(e) => 
+                    editingExpense 
+                      ? setEditingExpense({ ...editingExpense, date: e.target.value }) 
+                      : setNewExpense({ ...newExpense, date: e.target.value })
+                  }
                   required
                 />
                 <div className="flex space-x-4">
                   <button
                     type="button"
-                    onClick={() => setIsModalOpen(false)}
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setEditingExpense(null);
+                      setError('');
+                    }}
                     className="w-full bg-gray-200 text-gray-800 py-3 rounded-xl hover:bg-gray-300 transition"
                   >
                     Cancel
@@ -172,7 +336,7 @@ const ExpenseDashboard = () => {
                     type="submit"
                     className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition"
                   >
-                    Add Expense
+                    {editingExpense ? 'Update Expense' : 'Add Expense'}
                   </button>
                 </div>
               </form>

@@ -58,9 +58,9 @@ function Services() {
     {
       icon: FaShieldAlt,
       iconColor: "text-indigo-600",
-      title: "Secure Data Handling",
+      title: "Transaction Categorization",
       description: "Your data's security is our top priority. Enjoy peace of mind with end-to-end encryption and secure access controls.",
-      link: "#secure-data",
+      link: "/transactions",
       linkText: "Learn More",
       linkColor: "text-indigo-600 hover:text-indigo-800"
     }

@@ -18,6 +18,7 @@ import ExpenseAnalysis from './components/ExpenseAnalysis';
 import BudgetAdherence from './components/BudgetAdherence';
 import Dashboard from "./pages/FinanceAdvise";
 import InvestmentTracker from "./components/Investment/InvestmentTracker";
+import TransactionsPage from './pages/TransactionsPage';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/transactions" element={<TransactionsPage />} />
 
         {/*  */}
 

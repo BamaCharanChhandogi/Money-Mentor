@@ -156,7 +156,6 @@ export const addInvestmentAlert = async (req, res) => {
 // update price
 export const updatePrice = async (req, res) => {
   try {
-    console.log(req.body);
     
     const investments = await Investment.find({ user: req.user._id });
     const updatedInvestments = [];
@@ -165,7 +164,6 @@ export const updatePrice = async (req, res) => {
       try {
         // Get latest stock details
         const stockDetails = await getStockDetails(investment.symbol);
-        console.log(stockDetails);
         
         
         // Calculate basic performance metrics

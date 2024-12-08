@@ -22,7 +22,7 @@ class PlaidService {
     try {
       const request = {
         user: { client_user_id: userId.toString() },
-        client_name: 'Your App Name',
+        client_name: 'Money Mentor',
         products: ['auth', 'transactions'],
         country_codes: ['US'],
         language: 'en',

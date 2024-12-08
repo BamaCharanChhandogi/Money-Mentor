@@ -15,8 +15,8 @@ export const addTransaction = async (req, res) => {
 export const getTransaction = async (req, res) => {
   try {
     const transactions = await Transaction.find({
-      user: req.user._id,
-    }).populate("bankAccount");
+      userId: req.user._id,
+    });
     res.send(transactions);
   } catch (error) {
     res.status(500).send();
@@ -26,7 +26,7 @@ export const getTransactionById = async (req, res) => {
   try {
     const transaction = await Transaction.findOne({
       _id: req.params.id,
-      user: req.user._id,
+      userId: req.user._id,
     }).populate("bankAccount");
     if (!transaction) {
       return res.status(404).send();
@@ -50,7 +50,7 @@ export const updateTransaction = async (req, res) => {
   try {
     const transaction = await Transaction.findOne({
       _id: req.params.id,
-      user: req.user._id,
+      userId: req.user._id,
     });
     if (!transaction) {
       return res.status(404).send();
