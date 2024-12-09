@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Plus, TrendingUp, Wallet, Calendar, Edit, Trash2 } from 'lucide-react';
+import { BASE_URL } from '../../api';
 
 const ExpenseDashboard = () => {
   const [expenses, setExpenses] = useState([]);
@@ -23,7 +24,7 @@ const ExpenseDashboard = () => {
           throw new Error('No authentication token found');
         }
 
-        const response = await fetch('http://localhost:5000/api/expenses', {
+        const response = await fetch(`${BASE_URL}/expenses`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ const ExpenseDashboard = () => {
   
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/expenses', {
+      const response = await fetch(`${BASE_URL}/expenses`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +107,7 @@ const ExpenseDashboard = () => {
   
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/expenses/${editingExpense._id}`, {
+      const response = await fetch(`${BASE_URL}/expenses/${editingExpense._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +145,7 @@ const ExpenseDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       
-      const response = await fetch(`http://localhost:5000/api/expenses/${id}`, {
+      const response = await fetch(`${BASE_URL}/expenses/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer, { setUser } from './authSlice';
+import { BASE_URL } from '../api';
 
 // Function to fetch user data from the backend
 async function getUserData(dispatch, token) {
   try {
-    const response = await fetch('http://localhost:5000/api/auth/get-user', {
+    const response = await fetch(`${BASE_URL}/auth/get-user`, {
       headers: {
         Authorization: `Bearer ${token}`, // Pass token in Authorization header
       },
