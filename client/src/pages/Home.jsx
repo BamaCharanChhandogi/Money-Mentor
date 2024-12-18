@@ -16,7 +16,6 @@ function Home() {
     useEffect(() => {
         const fetchFinancialData = async () => {
             try {
-                // Fetch multiple endpoints concurrently
                 const [
                     balanceResponse, 
                     expensesResponse, 
