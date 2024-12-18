@@ -118,13 +118,13 @@ function Services() {
           <div className="bg-gradient-to-r from-sky-500 to-indigo-600 
             text-white p-8 rounded-2xl shadow-2xl max-w-4xl mx-auto">
             <h3 className="text-3xl font-bold mb-4">
-              Your Financial Future Starts Here
+              Your Finance with Family
             </h3>
             <p className="text-xl mb-6">
               Unlock personalized financial insights and take control of your financial health
             </p>
             <Link
-              to="/signup"
+              to="/family"
               className="bg-white text-indigo-600 px-8 py-3 
               rounded-full font-bold hover:bg-gray-100 
               transition duration-300 inline-block"

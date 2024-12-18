@@ -10,7 +10,8 @@ import insurancePolicy from './insurancePolicyRoutes.js';
 import  financialChatbot  from './financialChatbotRoutes.js';
 import plaidRoutes  from './plaidRoutes.js';
 import transactionCategorization from '../routes/TransactionCategorization.js';
-
+import familyGroupRoutes from './familyGroupRoutes.js';
+import sharedExpenseRoutes from './sharedExpenseRoutes.js';
 const router = express.Router();
 
 router.use("/api/auth",authRoutes);
@@ -24,5 +25,7 @@ router.use('/api/insurance-policies', insurancePolicy);
 router.use('/api/financial-chatbot',financialChatbot );
 router.use('/api/plaid',plaidRoutes );
 router.use('/api',transactionCategorization );
+router.use('/api/family-groups', familyGroupRoutes);
+router.use('/api/shared-expenses', sharedExpenseRoutes);
 
 export default router;

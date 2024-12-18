@@ -1,16 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { BASE_URL } from '../../api';
+import { 
+  MessageCircle, 
+  Send, 
+  X, 
+  ArrowDown, 
+  Sparkles, 
+  RefreshCw 
+} from 'lucide-react';
 
 const Chatbot = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    { role: 'bot', content: 'Hello! I\'m your financial assistant. How can I help you today?' }
+  ]);
   const [input, setInput] = useState('');
-  const [isOpen, setIsOpen] = useState(false); // Toggle for chatbox visibility
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
     const userMessage = { role: 'user', content: input };
-    setMessages([...messages, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
 
     try {
       const response = await fetch(`${BASE_URL}/financial-chatbot/chat`, {
@@ -23,79 +45,128 @@ const Chatbot = () => {
       });
 
       const data = await response.json();
-      const botMessage = { role: 'bot', content: data.response || 'Error fetching advice.' };
-      setMessages((prev) => [...prev, botMessage]);
+      const botMessage = { 
+        role: 'bot', 
+        content: data.response || 'I apologize, but I couldn\'t process your request.',
+        type: data.type || 'default'
+      };
+      
+      setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Error:', error);
-      setMessages((prev) => [...prev, { role: 'bot', content: 'An error occurred.' }]);
+      setMessages(prev => [...prev, { 
+        role: 'bot', 
+        content: 'Oops! There was a network error. Please try again.',
+        type: 'error'
+      }]);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    setInput('');
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
+  const renderMessageIcon = (type) => {
+    switch(type) {
+      case 'advice':
+        return <Sparkles className="w-5 h-5 text-purple-500" />;
+      case 'warning':
+        return <RefreshCw className="w-5 h-5 text-yellow-500" />;
+      case 'error':
+        return <X className="w-5 h-5 text-red-500" />;
+      default:
+        return null;
+    }
   };
 
   return (
-    <>
-      {/* Chat Icon */}
-      <div
-        className="fixed bottom-5 right-5 w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center cursor-pointer shadow-lg z-[1000]"
+    <div className="fixed bottom-6 right-6 z-50">
+      {/* Floating Chat Button */}
+      <button 
         onClick={() => setIsOpen(!isOpen)}
+        className="group relative w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-full shadow-2xl hover:shadow-xl transition-all duration-300 flex items-center justify-center"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="2"
-          stroke="currentColor"
-          className="w-8 h-8"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 20h9M12 20l-3-3m3 3l3-3M15 7H9m6 4H9m6 4H9m12-3a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      </div>
+        <MessageCircle className="w-8 h-8 group-hover:rotate-6 transition-transform" />
+        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+          AI
+        </span>
+      </button>
 
-      {/* Chatbox */}
+      {/* Chatbot Modal */}
       {isOpen && (
-        <div className="fixed bottom-20 right-5 w-80 h-96 bg-white shadow-lg border border-gray-300 rounded-lg flex flex-col z-[1000]">
-          <div className="flex justify-between items-center bg-blue-500 text-white p-4 rounded-t-lg">
-            <h3 className="text-lg font-bold">Chatbot</h3>
-            <button className="text-white font-bold" onClick={() => setIsOpen(false)}>
-              ✕
+        <div className="fixed bottom-24 right-6 w-96 max-h-[600px] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden animate-slide-up">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-4 flex justify-between items-center">
+            <div className="flex items-center space-x-3">
+              <Sparkles className="w-6 h-6" />
+              <h3 className="text-lg font-bold">AI Financial Assistant</h3>
+            </div>
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="hover:bg-white/20 rounded-full p-1 transition-colors"
+            >
+              <X className="w-6 h-6" />
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4">
+
+          {/* Messages Container */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
             {messages.map((msg, idx) => (
-              <div key={idx} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                <p
-                  className={`inline-block px-4 py-2 rounded-lg ${
-                    msg.role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
-                  }`}
+              <div 
+                key={idx} 
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div 
+                  className={`
+                    max-w-[80%] px-4 py-3 rounded-2xl 
+                    ${msg.role === 'user' 
+                      ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white' 
+                      : 'bg-white border border-gray-200 text-gray-800 shadow-sm'}
+                  `}
                 >
-                  {msg.content}
-                </p>
+                  <div className="flex items-start space-x-2">
+                    {msg.role === 'bot' && renderMessageIcon(msg.type)}
+                    <p className="text-sm">{msg.content}</p>
+                  </div>
+                </div>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
-          <div className="p-4 border-t border-gray-300 flex">
+
+          {/* Input Area */}
+          <div className="p-4 bg-white border-t border-gray-200 flex space-x-2">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2"
+              onKeyPress={handleKeyPress}
+              placeholder="Ask me about finances..."
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
             />
             <button
               onClick={sendMessage}
-              className="ml-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              disabled={isLoading}
+              className={`
+                bg-gradient-to-br from-indigo-500 to-purple-600 text-white 
+                rounded-full p-2 hover:opacity-90 transition-all
+                ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}
+              `}
             >
-              Send
+              {isLoading ? (
+                <RefreshCw className="w-5 h-5 animate-spin" />
+              ) : (
+                <Send className="w-5 h-5" />
+              )}
             </button>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
