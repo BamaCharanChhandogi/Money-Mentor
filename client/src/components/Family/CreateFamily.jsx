@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast'
-import { BASE_URL } from '../../api';
 
-const BASE_URL = `${BASE_URL}/family-group`; // Update to match your backend URL
+const BASE_URL = `https://money-mentor-1f1e.onrender.com/api/family-group`; // Update to match your backend URL
 
 const CreateFamily = () => {
   const [familyName, setFamilyName] = useState('');
