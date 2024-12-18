@@ -14,8 +14,13 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    methods: ["GET", "POST"]
+    origin: [
+      process.env.CLIENT_URL,
+      'http://localhost:5173',
+      'https://money-mentor-wheat.vercel.app'
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
@@ -24,7 +29,11 @@ const port = process.env.PORT;
 dbConnection();
 app.use(express.json());
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  origin: [
+    process.env.CLIENT_URL, 
+    'http://localhost:5173',  // Keep local development option
+    'https://money-mentor-wheat.vercel.app'
+  ],
   credentials: true
 }));
 
