@@ -139,9 +139,9 @@ const InvestmentTracker = () => {
     };
   
     return (
-      <div className="min-h-screen bg-gray-50 p-8" style={{ background: `linear-gradient(135deg, ${COLORS.background.start} 0%, ${COLORS.background.end} 100%)`,backgroundAttachment: 'fixed' }}>
+      <div className="min-h-screen bg-gradient-to-r from-purple-100 to-blue-100 shadow-xl p-8" style={{ background: `linear-gradient(135deg, ${COLORS.background.start} 0%, ${COLORS.background.end} 100%)`,backgroundAttachment: 'fixed' }}>
         <div className="container mx-auto max-w-7xl space-y-8">
-          {/* Header */}
+          {/* Header */} 
           <div className="bg-white shadow-lg rounded-2xl p-6 flex justify-between items-center border-l-6 border-[#1E40AF]"  style={{ 
             borderLeft: `6px solid ${COLORS.primary.dark}`,
             background: 'rgba(255, 255, 255, 0.8)',

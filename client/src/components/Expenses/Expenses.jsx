@@ -190,7 +190,7 @@ const ExpenseDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-6">
+    <div className="min-h-screen bg-gradient-to-r from-purple-100 to-blue-100 shadow-xl p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-2xl shadow-xl mb-6">

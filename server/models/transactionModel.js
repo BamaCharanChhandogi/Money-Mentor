@@ -3,7 +3,7 @@ const TransactionSchema = new mongoose.Schema({
   accountId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Account',
-    required: true
+    // required: true
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -12,7 +12,7 @@ const TransactionSchema = new mongoose.Schema({
   },
   plaidTransactionId: {
     type: String,
-    required: true,
+    // required: true,
     unique: true
   },
   amount: {

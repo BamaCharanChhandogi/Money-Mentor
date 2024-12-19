@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { usePlaidLink } from 'react-plaid-link';
-import { Building, CreditCard, RefreshCw, Loader2 } from 'lucide-react';
+import { Building, CreditCard, RefreshCw, Loader2, Check, AlertTriangle } from 'lucide-react';
 import { BASE_URL } from '../../api';
 
 // API service for backend communication
@@ -63,10 +63,17 @@ const Toast = ({ message, type, onClose }) => {
   }, [onClose]);
 
   return (
-    <div className={`fixed top-24 right-4 p-4 rounded shadow-lg ${
-      type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
-    }`}>
-      {message}
+    <div className={`fixed top-6 right-6 z-50 p-4 rounded-xl shadow-2xl transform transition-all duration-300 ease-in-out 
+      ${type === 'error' 
+        ? 'bg-red-600 text-white border-2 border-red-700' 
+        : 'bg-green-600 text-white border-2 border-green-700'
+      } flex items-center space-x-3 animate-slide-in`}>
+      {type === 'error' ? (
+        <AlertTriangle className="h-5 w-5" />
+      ) : (
+        <Check className="h-5 w-5" />
+      )}
+      <span className="font-medium">{message}</span>
     </div>
   );
 };
@@ -101,9 +108,15 @@ const PlaidLinkButton = ({ onSuccess, onExit }) => {
     <button
       onClick={() => open()}
       disabled={!ready}
-      className="w-full bg-blue-500 text-white p-3 rounded-lg flex items-center justify-center hover:bg-blue-600 disabled:bg-gray-300"
+      className="w-full bg-gradient-to-br from-indigo-600 to-purple-700 text-white 
+        p-4 rounded-xl flex items-center justify-center 
+        hover:from-indigo-700 hover:to-purple-800 
+        transition-all duration-300 ease-in-out 
+        focus:outline-none focus:ring-4 focus:ring-purple-300 
+        disabled:opacity-50 disabled:cursor-not-allowed 
+        transform hover:-translate-y-1 shadow-lg hover:shadow-xl"
     >
-      <Building className="mr-2 h-4 w-4" />
+      <Building className="mr-3 h-5 w-5" />
       Connect Bank Account
     </button>
   );
@@ -122,12 +135,15 @@ const AccountCard = ({ account, onSync }) => {
   };
 
   return (
-    <div className="border rounded-lg p-4 bg-white shadow-sm">
-      <div className="flex items-center justify-between">
+    <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 
+      border border-gray-200 overflow-hidden">
+      <div className="p-5 flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <CreditCard className="h-6 w-6 text-gray-500" />
+          <div className="bg-purple-100 p-3 rounded-full">
+            <CreditCard className="h-6 w-6 text-purple-600" />
+          </div>
           <div>
-            <h3 className="font-medium">{account.accountName}</h3>
+            <h3 className="text-lg font-semibold text-gray-800">{account.accountName}</h3>
             <p className="text-sm text-gray-500">
               {account.accountType} • {account.accountSubtype}
             </p>
@@ -135,20 +151,22 @@ const AccountCard = ({ account, onSync }) => {
         </div>
         <div className="flex items-center space-x-4">
           <div className="text-right">
-            <p className="font-medium">
+            <p className="text-xl font-bold text-gray-800">
               ${account.balance?.current?.toFixed(2) || '0.00'}
             </p>
-            <p className="text-sm text-gray-500">Current Balance</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wider">Current Balance</p>
           </div>
           <button
-            className="p-2 rounded-lg border hover:bg-pink-50"
+            className="p-3 rounded-full bg-purple-50 hover:bg-purple-100 
+              transition-all duration-300 ease-in-out 
+              focus:outline-none focus:ring-2 focus:ring-purple-300"
             onClick={handleSync}
             disabled={syncing}
           >
             {syncing ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-5 w-5 text-purple-600 animate-spin" />
             ) : (
-              <RefreshCw className="h-4 w-4" />
+              <RefreshCw className="h-5 w-5 text-purple-600" />
             )}
           </button>
         </div>
@@ -160,8 +178,12 @@ const AccountCard = ({ account, onSync }) => {
 const AccountList = ({ accounts, onSync }) => {
   if (!accounts || accounts.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
-        No connected accounts found
+      <div className="text-center py-12 bg-gray-50 rounded-xl">
+        <div className="bg-purple-100 p-4 rounded-full inline-block mb-4">
+          <CreditCard className="h-8 w-8 text-purple-600" />
+        </div>
+        <p className="text-lg text-gray-600">No connected accounts found</p>
+        <p className="text-sm text-gray-500 mt-2">Connect a bank account to get started</p>
       </div>
     );
   }
@@ -177,7 +199,7 @@ const AccountList = ({ accounts, onSync }) => {
       ))}
     </div>
   );
-};
+}
 
 const PlaidIntegration = () => {
   const [accounts, setAccounts] = useState([]);
@@ -229,30 +251,38 @@ const PlaidIntegration = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 min-h-screen">
-      {toastMessage && (
-        <Toast
-          message={toastMessage.text}
-          type={toastMessage.type}
-          onClose={() => setToastMessage(null)}
-        />
-      )}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold mb-6">Connected Accounts</h2>
-        <PlaidLinkButton
-          onSuccess={handlePlaidSuccess}
-          onExit={handlePlaidExit}
-        />
-        {loading ? (
-          <div className="flex justify-center p-4">
-            <Loader2 className="h-6 w-6 animate-spin" />
-          </div>
-        ) : (
-          <AccountList
-            accounts={accounts}
-            onSync={handleSync}
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-white p-6 md:p-12">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+        {toastMessage && (
+          <Toast
+            message={toastMessage.text}
+            type={toastMessage.type}
+            onClose={() => setToastMessage(null)}
           />
         )}
+        <div className="p-8 space-y-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-3xl font-bold text-gray-800">Connected Accounts</h2>
+          </div>
+          
+          <PlaidLinkButton
+            onSuccess={handlePlaidSuccess}
+            onExit={handlePlaidExit}
+          />
+          
+          <div className="mt-8">
+            {loading ? (
+              <div className="flex justify-center items-center p-8">
+                <Loader2 className="h-8 w-8 text-purple-600 animate-spin" />
+              </div>
+            ) : (
+              <AccountList
+                accounts={accounts}
+                onSync={handleSync}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
