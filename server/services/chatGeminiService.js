@@ -3,7 +3,7 @@ import {GoogleGenerativeAI} from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function getFinancialAdvice(userContext, userMessage) {
-  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   const prompt = `
 You are an AI financial advisor. Use the following user context to provide personalized financial advice:
