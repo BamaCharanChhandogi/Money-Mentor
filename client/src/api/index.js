@@ -3,6 +3,7 @@ import axios from "axios";
 // export const BASE_URL = 'https://money-mentor-1f1e.onrender.com/api';
 export const BASE_URL = 'http://localhost:5000/api';
 const token = localStorage.getItem('token');
+console.log("hello")
 
 export const login = async (email, password) => {
   try {
