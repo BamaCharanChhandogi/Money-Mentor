@@ -49,4 +49,14 @@ router.get('/accounts', auth, async (req, res) => {
   }
 });
 
+router.delete('/accounts/:accountId', auth, async (req, res) => {
+  console.log('Backend: DELETE request for account', req.params.accountId, 'from user', req.user._id);
+  try {
+    const result = await plaidService.deleteAccount(req.user._id, req.params.accountId);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;

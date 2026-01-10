@@ -160,16 +160,35 @@ class PlaidService {
       throw error;
     }
   }
-  // Add this to your plaidService.js
-async getAllAccounts(userId) {
-  try {
-    const accounts = await Account.find({ userId });
-    return accounts;
-  } catch (error) {
-    console.error('Error getting accounts:', error);
-    throw error;
+  async getAllAccounts(userId) {
+    try {
+      const accounts = await Account.find({ userId });
+      return accounts;
+    } catch (error) {
+      console.error('Error getting accounts:', error);
+      throw error;
+    }
   }
-}
+
+  async deleteAccount(userId, accountId) {
+    try {
+      const account = await Account.findOne({ _id: accountId, userId });
+      if (!account) {
+        throw new Error('Account not found');
+      }
+
+      // Delete associated transactions first
+      await Transaction.deleteMany({ accountId });
+      
+      // Delete the account itself
+      await Account.deleteOne({ _id: accountId });
+      
+      return { message: 'Account and associated transactions deleted successfully' };
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      throw error;
+    }
+  }
 }
 
 export const plaidService = new PlaidService();

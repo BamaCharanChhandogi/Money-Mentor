@@ -17,7 +17,22 @@ const familyGroupSchema = new mongoose.Schema({
       type: String,
       enum: ['owner', 'admin', 'member'],
       default: 'member'
+    },
+    status: {
+      type: String,
+      enum: ['active', 'pending'],
+      default: 'active'
     }
+  }],
+  invitations: [{
+    email: { type: String, required: true },
+    token: { type: String, required: true },
+    status: { 
+      type: String, 
+      enum: ['pending', 'accepted', 'expired'], 
+      default: 'pending' 
+    },
+    expiresAt: { type: Date, required: true }
   }],
   sharedExpenses: [{
     type: mongoose.Schema.Types.ObjectId,

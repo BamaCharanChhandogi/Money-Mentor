@@ -6,7 +6,9 @@ import {
   getFamilyDetails,
   inviteMember,
   removeMember,
-  updateFamily
+  updateFamily,
+  deleteFamily,
+  joinFamily
 } from '../controllers/familyGroupController.js';
 
 import auth from '../middleware/authMiddleware.js';
@@ -17,7 +19,9 @@ router.get('/', auth, getFamilies); // New route for fetching all families
 router.get('/:familyId', auth, getFamilyDetails);
 router.post('/:familyId/members', auth, inviteMember);
 router.delete('/:groupId/members/:memberId', auth, removeMember);
-router.patch('/:groupId', auth, updateFamily);
+router.patch('/:familyId', auth, updateFamily);
+router.delete('/:familyId', auth, deleteFamily);
+router.post('/join', auth, joinFamily);
 
 
 export default router;

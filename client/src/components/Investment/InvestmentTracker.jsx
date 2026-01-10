@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  PieChart, 
-  Pie, 
-  Cell, 
-  ResponsiveContainer 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer
 } from "recharts";
 import { BASE_URL } from "../../api";
 import { useSelector } from "react-redux";
-import { 
-  PlusCircle, 
-  RefreshCw, 
-  TrendingUp, 
-  TrendingDown, 
-  PieChart as PieChartIcon, 
+import {
+  PlusCircle,
+  RefreshCw,
+  TrendingUp,
+  TrendingDown,
+  PieChart as PieChartIcon,
   DollarSign,
   ArrowUpRight,
   ArrowDownRight,
-  Info
+  Info,
+  Wallet
 } from "lucide-react";
 
 const InvestmentTracker = () => {
@@ -76,7 +77,6 @@ const InvestmentTracker = () => {
       });
       fetchInvestments();
       fetchPortfolioSummary();
-      // Reset form
       setNewInvestment({
         symbol: "",
         name: "",
@@ -102,174 +102,144 @@ const InvestmentTracker = () => {
       await fetchInvestments();
       await fetchPortfolioSummary();
 
-      // Show success message with update details
-      const message = `Updated ${response.data.updatedCount} investments successfully`;
-      alert(message);
+      alert(`Updated ${response.data.updatedCount} investments successfully`);
     } catch (error) {
       console.error("Error updating prices:", error);
-      alert(
-        error.response?.data?.error || "Failed to update investment prices"
-      );
+      alert(error.response?.data?.error || "Failed to update investment prices");
     } finally {
       setIsUpdatePricesLoading(false);
     }
   };
 
-  // Asset Allocation Pie Chart Data
   const assetAllocationData = portfolioSummary
     ? Object.entries(portfolioSummary.assetAllocation).map(([name, value]) => ({
-        name,
-        value,
-      }))
+      name,
+      value,
+    }))
     : [];
 
-    const COLORS = {
-      primary: '#1E40AF',      // Deep Blue
-      secondary: '#10B981',    // Emerald Green
-      accent: '#6366F1',       // Indigo
-      background: '#F9FAFB',   // Light Gray Background
-      text: {
-        dark: '#111827',       // Almost Black
-        light: '#4B5563',      // Gray
-        muted: '#6B7280'       // Lighter Gray
-      },
-      green: '#10B981',        // Success Green
-      red: '#EF4444',          // Error Red
-      yellow: '#F59E0B'        // Warning Yellow
-    };
-  
-    return (
-      <div className="min-h-screen bg-gradient-to-r from-purple-100 to-blue-100 shadow-xl p-8" style={{ background: `linear-gradient(135deg, ${COLORS.background.start} 0%, ${COLORS.background.end} 100%)`,backgroundAttachment: 'fixed' }}>
-        <div className="container mx-auto max-w-7xl space-y-8">
-          {/* Header */} 
-          <div className="bg-white shadow-lg rounded-2xl p-6 flex justify-between items-center border-l-6 border-[#1E40AF]"  style={{ 
-            borderLeft: `6px solid ${COLORS.primary.dark}`,
-            background: 'rgba(255, 255, 255, 0.8)',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <div className="flex items-center space-x-4">
-              <div className="bg-blue-100 p-3 rounded-full shadow-md" style={{ 
-                backgroundColor: `${COLORS.primary.light}14`, 
-                color: COLORS.primary.light 
-              }}>
-                <DollarSign className="w-8 h-8 text-blue-600" />
+  const COLORS = ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444'];
+
+  return (
+    <div className="min-h-screen bg-mesh py-8">
+      <div className="container mx-auto px-4 lg:px-8 space-y-8">
+        {/* Header */}
+        <div className="glass-card p-6 flex flex-col md:flex-row justify-between items-center gap-4 shadow-xl fade-in-up">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl shadow-lg">
+              <Wallet className="w-8 h-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-display font-bold text-slate-900">
+                Investment Portfolio
+              </h1>
+              <p className="text-slate-600">
+                Track and manage your investments
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleUpdatePrices}
+            disabled={isUpdatePricesLoading}
+            className="btn-primary flex items-center space-x-2 disabled:opacity-50 shadow-primary-500/25"
+          >
+            {isUpdatePricesLoading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                <span>Updating...</span>
+              </>
+            ) : (
+              <>
+                <RefreshCw className="w-5 h-5" />
+                <span>Update Prices</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Portfolio Overview */}
+        {portfolioSummary && (
+          <div className="grid md:grid-cols-3 gap-6 fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <div className="stat-card-gradient bg-gradient-to-br from-primary-500 to-primary-700 p-6 rounded-2xl">
+              <div className="flex justify-between items-center mb-4">
+                <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
+                  <DollarSign className="text-white h-6 w-6" />
+                </div>
+                <TrendingUp className="w-6 h-6 text-white/80" />
               </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900" style={{ color: COLORS.text.dark }}>
-                  Investment Portfolio
-                </h1>
-                <p className="text-gray-500 text-sm" style={{ color: COLORS.text.muted }}>
-                  Intelligent Investment Tracking
-                </p>
+              <span className="text-sm font-medium text-white/80">Total Portfolio Value</span>
+              <div className="text-4xl font-bold text-white mt-2">
+                ${portfolioSummary.performanceSummary.totalValue?.toFixed(2)}
+              </div>
+              <div className="flex items-center mt-3 text-xs text-white/90">
+                <ArrowUpRight className="w-4 h-4 mr-1" />
+                <span>+5.2% this month</span>
               </div>
             </div>
-            <button 
-              onClick={handleUpdatePrices}
-              disabled={isUpdatePricesLoading}
-              className="bg-[#1E40AF] text-white px-6 py-3 rounded-lg hover:bg-[#2563EB] transition flex items-center space-x-2 disabled:opacity-50 shadow-md hover:shadow-lg"
-            >
-              {isUpdatePricesLoading ? (
-                <span className="animate-pulse">Updating...</span>
-              ) : (
-                <>
-                  <RefreshCw className="w-5 h-5" />
-                  <span>Update Prices</span>
-                </>
-              )}
-            </button>
-          </div>
-  
-          {/* Portfolio Overview */}
-          {portfolioSummary && (
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white shadow-lg rounded-2xl p-6 transform transition hover:scale-[1.03] hover:shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold text-gray-600" style={{ color: COLORS.text.light }}>
-                    Total Portfolio Value
-                  </h2>
-                  <TrendingUp className="w-6 h-6 text-green-500" />
-                </div>
-                <p className="text-4xl font-bold text-gray-900" style={{ color: COLORS.text.dark }}>
-                  ${portfolioSummary.performanceSummary.totalValue?.toFixed(2)}
-                </p>
-                <div className="flex items-center mt-2 text-sm">
-                  <ArrowUpRight className="w-4 h-4 text-green-500 mr-1" />
-                  <span className="text-green-600">+5.2% this month</span>
-                </div>
-              </div>
-  
-              <div className="bg-white shadow-lg rounded-2xl p-6 transform transition hover:scale-[1.03] hover:shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-500"></div>
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold text-gray-600" style={{ color: COLORS.text.light }}>
-                    Total Return
-                  </h2>
+
+            <div className="stat-card-gradient bg-gradient-to-br from-success-500 to-success-700 p-6 rounded-2xl">
+              <div className="flex justify-between items-center mb-4">
+                <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
                   {portfolioSummary.performanceSummary.overallReturn > 0 ? (
-                    <TrendingUp className="w-6 h-6 text-green-500" />
+                    <TrendingUp className="text-white h-6 w-6" />
                   ) : (
-                    <TrendingDown className="w-6 h-6 text-red-500" />
+                    <TrendingDown className="text-white h-6 w-6" />
                   )}
                 </div>
-                <p className={`text-4xl font-bold ${portfolioSummary.performanceSummary.overallReturn > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {portfolioSummary.performanceSummary.overallReturn?.toFixed(2)}%
-                </p>
-                <div className="flex items-center mt-2 text-sm">
-                  <Info className="w-4 h-4 text-blue-500 mr-1" />
-                  <span className="text-gray-500">Since portfolio inception</span>
-                </div>
               </div>
-  
-              <div className="bg-white shadow-lg rounded-2xl p-6 transform transition hover:scale-[1.03] hover:shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-indigo-500"></div>
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold text-gray-600" style={{ color: COLORS.text.light }}>
-                    Asset Allocation
-                  </h2>
-                  <PieChartIcon className="w-6 h-6 text-blue-500" />
-                </div>
-                <ResponsiveContainer width="100%" height={200}>
-                  <PieChart>
-                    <Pie
-                      data={assetAllocationData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {assetAllocationData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={[
-                          "#1E40AF", "#10B981", "#6366F1", "#EF4444", "#F59E0B"
-                        ][index % 5]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
+              <span className="text-sm font-medium text-white/80">Total Return</span>
+              <div className="text-4xl font-bold text-white mt-2">
+                {portfolioSummary.performanceSummary.overallReturn?.toFixed(2)}%
+              </div>
+              <div className="flex items-center mt-3 text-xs text-white/90">
+                <Info className="w-4 h-4 mr-1" />
+                <span>Since inception</span>
               </div>
             </div>
-          )}
-  
-          {/* Add Investment Form */}
-          <div className="bg-white shadow-lg rounded-2xl p-8">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900 flex items-center gap-3" style={{ color: COLORS.text.dark }}>
-              <PlusCircle className="w-6 h-6 text-blue-600" />
-              Add New Investment
-            </h2>
-            <form onSubmit={handleAddInvestment} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block mb-2 text-gray-700 font-semibold" style={{ color: COLORS.text.light }}>Symbol</label>
-                  <select
-                    value={newInvestment.symbol}
-                    onChange={(e) =>
-                      setNewInvestment({ ...newInvestment, symbol: e.target.value })
-                    }
-                    className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300"
-                    required
+
+            <div className="glass-card p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-bold text-slate-900">Asset Allocation</h3>
+                <PieChartIcon className="w-6 h-6 text-primary-500" />
+              </div>
+              <ResponsiveContainer width="100%" height={180}>
+                <PieChart>
+                  <Pie
+                    data={assetAllocationData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={70}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {assetAllocationData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        {/* Add Investment Form */}
+        <div className="glass-card p-8 fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <h2 className="text-2xl font-bold mb-6 text-slate-900 flex items-center gap-3">
+            <PlusCircle className="w-6 h-6 text-primary-600" />
+            Add New Investment
+          </h2>
+          <form onSubmit={handleAddInvestment} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block mb-2 text-sm font-semibold text-slate-700">Symbol</label>
+                <select
+                  value={newInvestment.symbol}
+                  onChange={(e) => setNewInvestment({ ...newInvestment, symbol: e.target.value })}
+                  className="input-primary"
+                  required
                 >
                   <option value="">Select Symbol</option>
                   <optgroup label="Stocks">
@@ -284,28 +254,25 @@ const InvestmentTracker = () => {
                 </select>
               </div>
               <div>
-                <label className="block mb-2 text-gray-700 font-semibold">Name</label>
+                <label className="block mb-2 text-sm font-semibold text-slate-700">Name</label>
                 <input
                   type="text"
                   value={newInvestment.name}
-                  onChange={(e) =>
-                    setNewInvestment({ ...newInvestment, name: e.target.value })
-                  }
-                  className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  onChange={(e) => setNewInvestment({ ...newInvestment, name: e.target.value })}
+                  className="input-primary"
+                  placeholder="Investment name"
                   required
                 />
               </div>
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-2 text-gray-700 font-semibold">Type</label>
+                <label className="block mb-2 text-sm font-semibold text-slate-700">Type</label>
                 <select
                   value={newInvestment.type}
-                  onChange={(e) =>
-                    setNewInvestment({ ...newInvestment, type: e.target.value })
-                  }
-                  className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  onChange={(e) => setNewInvestment({ ...newInvestment, type: e.target.value })}
+                  className="input-primary"
                 >
                   <option value="stock">Stock</option>
                   <option value="bond">Bond</option>
@@ -314,17 +281,13 @@ const InvestmentTracker = () => {
                 </select>
               </div>
               <div>
-                <label className="block mb-2 text-gray-700 font-semibold">Quantity</label>
+                <label className="block mb-2 text-sm font-semibold text-slate-700">Quantity</label>
                 <input
                   type="number"
                   value={newInvestment.quantity}
-                  onChange={(e) =>
-                    setNewInvestment({
-                      ...newInvestment,
-                      quantity: parseFloat(e.target.value),
-                    })
-                  }
-                  className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  onChange={(e) => setNewInvestment({ ...newInvestment, quantity: parseFloat(e.target.value) })}
+                  className="input-primary"
+                  placeholder="0"
                   required
                 />
               </div>
@@ -332,95 +295,85 @@ const InvestmentTracker = () => {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-2 text-gray-700 font-semibold">Purchase Price</label>
+                <label className="block mb-2 text-sm font-semibold text-slate-700">Purchase Price</label>
                 <input
                   type="number"
                   value={newInvestment.purchasePrice}
-                  onChange={(e) =>
-                    setNewInvestment({
-                      ...newInvestment,
-                      purchasePrice: parseFloat(e.target.value),
-                    })
-                  }
-                  className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  onChange={(e) => setNewInvestment({ ...newInvestment, purchasePrice: parseFloat(e.target.value) })}
+                  className="input-primary"
+                  placeholder="0.00"
                   required
                 />
               </div>
               <div>
-                <label className="block mb-2 text-gray-700 font-semibold">Purchase Date</label>
+                <label className="block mb-2 text-sm font-semibold text-slate-700">Purchase Date</label>
                 <input
                   type="date"
                   value={newInvestment.purchaseDate}
-                  onChange={(e) =>
-                    setNewInvestment({
-                      ...newInvestment,
-                      purchaseDate: e.target.value,
-                    })
-                  }
-                  className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  onChange={(e) => setNewInvestment({ ...newInvestment, purchaseDate: e.target.value })}
+                  className="input-primary"
                   required
                 />
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="w-full bg-[#1E40AF] text-white p-3 rounded-lg hover:bg-[#2563EB] transition-colors font-semibold shadow-md hover:shadow-lg"
-            >
+            <button type="submit" className="btn-success w-full md:w-auto px-8">
               Add Investment
             </button>
           </form>
         </div>
 
         {/* Investments Table */}
-        <div className="bg-white shadow-lg rounded-2xl p-8 overflow-x-auto">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900" style={{ color: COLORS.text.dark }}>
+        <div className="glass-card p-8 overflow-x-auto fade-in-up" style={{ animationDelay: '0.3s' }}>
+          <h2 className="text-2xl font-bold mb-6 text-slate-900">
             Current Investments
           </h2>
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="p-3 text-left">Symbol</th>
-                <th className="p-3 text-left">Name</th>
-                <th className="p-3 text-left">Type</th>
-                <th className="p-3 text-left">Quantity</th>
-                <th className="p-3 text-left">Purchase Price</th>
-                <th className="p-3 text-left">Current Price</th>
-                <th className="p-3 text-left">Total Value</th>
-                <th className="p-3 text-left">Return</th>
-              </tr>
-            </thead>
-            <tbody>
-              {investments.map((investment) => (
-                <tr key={investment._id} className="hover:bg-gray-50 border-b transition duration-200">
-                  <td className="p-3">{investment.symbol}</td>
-                  <td className="p-3">{investment.name}</td>
-                  <td className="p-3">{investment.type}</td>
-                  <td className="p-3">{investment.quantity}</td>
-                  <td className="p-3">${investment.purchasePrice.toFixed(2)}</td>
-                  <td className="p-3">${investment.currentPrice.toFixed(2)}</td>
-                  <td className="p-3">
-                    ${(investment.quantity * investment.currentPrice).toFixed(2)}
-                  </td>
-                  <td
-                    className={`p-3 font-semibold ${
-                      investment.quantity * investment.currentPrice >
-                      investment.quantity * investment.purchasePrice
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {(
-                      ((investment.currentPrice - investment.purchasePrice) /
-                        investment.purchasePrice) *
-                      100
-                    ).toFixed(2)}
-                    %
-                  </td>
+          <div className="overflow-hidden rounded-xl border border-slate-200">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase">Symbol</th>
+                  <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase">Name</th>
+                  <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase">Type</th>
+                  <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase">Quantity</th>
+                  <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase">Purchase</th>
+                  <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase">Current</th>
+                  <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase">Total Value</th>
+                  <th className="p-4 text-left text-xs font-bold text-slate-500 uppercase">Return</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {investments.map((investment) => {
+                  const returnPercent = ((investment.currentPrice - investment.purchasePrice) / investment.purchasePrice) * 100;
+                  const isPositive = returnPercent > 0;
+                  return (
+                    <tr key={investment._id} className="hover:bg-slate-50 transition-colors">
+                      <td className="p-4 font-semibold text-slate-900">{investment.symbol}</td>
+                      <td className="p-4 text-slate-600">{investment.name}</td>
+                      <td className="p-4">
+                        <span className="px-2 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-600">
+                          {investment.type}
+                        </span>
+                      </td>
+                      <td className="p-4 text-slate-600">{investment.quantity}</td>
+                      <td className="p-4 text-slate-600">${investment.purchasePrice.toFixed(2)}</td>
+                      <td className="p-4 text-slate-900 font-semibold">${investment.currentPrice.toFixed(2)}</td>
+                      <td className="p-4 text-slate-900 font-bold">
+                        ${(investment.quantity * investment.currentPrice).toFixed(2)}
+                      </td>
+                      <td className="p-4">
+                        <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-lg text-sm font-bold ${isPositive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                          }`}>
+                          {isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                          <span>{returnPercent.toFixed(2)}%</span>
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

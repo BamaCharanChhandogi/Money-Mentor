@@ -18,7 +18,14 @@ const Verify = () => {
     try {
       const response = await verifyOTP({ email, otp });
       dispatch(loginSuccess({ token: response.token, user: response.user }));
-      navigate('/');
+
+      const returnUrl = localStorage.getItem('returnUrl');
+      if (returnUrl) {
+        localStorage.removeItem('returnUrl');
+        navigate(returnUrl);
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.msg || 'Verification failed');
     } finally {

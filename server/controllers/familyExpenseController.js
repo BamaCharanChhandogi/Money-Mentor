@@ -134,3 +134,38 @@ export const updateSharedExpenseSplit = async (req, res) => {
     });
   }
 };
+
+export const deleteSharedExpense = async (req, res) => {
+  try {
+    const { expenseId } = req.params;
+
+    const expense = await SharedExpense.findById(expenseId);
+    if (!expense) {
+      return res.status(404).json({ success: false, message: 'Expense not found' });
+    }
+
+    const family = await FamilyGroup.findById(expense.familyGroup);
+    if (!family) {
+      return res.status(404).json({ success: false, message: 'Family group not found' });
+    }
+
+    // Check permissions: Owner of family OR Creator of expense
+    const isFamilyOwner = family.owner.toString() === req.user.id;
+    const isExpenseCreator = expense.paidBy.toString() === req.user.id;
+
+    if (!isFamilyOwner && !isExpenseCreator) {
+      return res.status(403).json({ success: false, message: 'Not authorized to delete this expense' });
+    }
+
+    await SharedExpense.findByIdAndDelete(expenseId);
+    
+    // Emit socket event
+    // if (req.io) {
+    //   req.io.to(`family_${family._id}`).emit('shared_expense_deleted', expenseId);
+    // }
+
+    res.status(200).json({ success: true, message: 'Expense deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};

@@ -3,7 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSocket } from "../../context/SocketContext";
 import { toast } from "react-hot-toast";
-import { PlusCircle, DollarSign, Users } from "lucide-react";
+import {
+  PlusCircle,
+  DollarSign,
+  Users,
+  CreditCard,
+  PieChart,
+  Wallet,
+  Loader2,
+  ArrowRight
+} from "lucide-react";
+import { BASE_URL } from '../../api';
 
 const SharedExpenses = () => {
   const [families, setFamilies] = useState([]);
@@ -27,17 +37,17 @@ const SharedExpenses = () => {
           return;
         }
 
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/family-groups`, {
+        const response = await axios.get(`${BASE_URL}/family-groups`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        
+
         if (!response.data) {
           throw new Error('No data received from server');
         }
 
         const familiesData = response.data.families || [];
         setFamilies(familiesData);
-        
+
         if (familyId) {
           const family = familiesData.find(f => f._id === familyId);
           if (family) {
@@ -45,13 +55,16 @@ const SharedExpenses = () => {
           } else {
             toast.error('Family not found');
           }
+        } else if (familiesData.length > 0) {
+          // Auto-select first family if available and no ID param
+          setSelectedFamily(familiesData[0]);
         }
 
       } catch (error) {
         console.error('Fetch error:', error);
         const errorMessage = error.response?.data?.message || 'Error fetching families';
         toast.error(errorMessage);
-        
+
         if (error.response?.status === 401) {
           navigate('/login');
         }
@@ -72,10 +85,10 @@ const SharedExpenses = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/shared-expenses/${selectedFamily._id}`,
+          `${BASE_URL}/shared-expenses/${selectedFamily._id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
+
         if (response.data && Array.isArray(response.data.sharedExpenses)) {
           setSharedExpenses(response.data.sharedExpenses);
         } else {
@@ -130,54 +143,76 @@ const SharedExpenses = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-100 to-blue-50 shadow-xl py-12 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">
-              Shared Expenses
-            </h2>
-            {loading ? (
-              <div className="animate-pulse h-10 w-48 bg-gray-200 rounded-lg"></div>
-            ) : (
-              families.length > 0 ? (
-                <select
-                  onChange={(e) => handleFamilyChange(e.target.value)}
-                  value={selectedFamily?._id || ""}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
-                >
-                  <option value="">Select Family</option>
-                  {families.map((family) => (
-                    <option key={family._id} value={family._id}>
-                      {family.name}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <div className="text-gray-500">
-                  No families available. 
-                  <button 
-                    onClick={() => navigate('/family/create')}
-                    className="ml-2 text-emerald-600 hover:text-emerald-700"
-                  >
-                    Create Family
-                  </button>
-                </div>
-              )
-            )}
-          </div>
+    <div className="min-h-screen bg-mesh py-8">
+      <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
+        <div className="glass-card p-8 mb-8 fade-in-up">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center space-x-4">
+              <div className="p-4 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl shadow-lg">
+                <CreditCard className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-display font-bold text-slate-900">Shared Expenses</h1>
+                <p className="text-slate-600 mt-1">Track and split costs with your family</p>
+              </div>
+            </div>
 
-          {selectedFamily && (
-            <>
+            <div className="w-full md:w-auto min-w-[300px]">
+              {loading && families.length === 0 ? (
+                <div className="h-10 bg-slate-100 rounded-xl animate-pulse"></div>
+              ) : families.length > 0 ? (
+                <div className="relative">
+                  <select
+                    onChange={(e) => handleFamilyChange(e.target.value)}
+                    value={selectedFamily?._id || ""}
+                    className="input-primary appearance-none cursor-pointer"
+                  >
+                    <option value="">Select Family</option>
+                    {families.map((family) => (
+                      <option key={family._id} value={family._id}>
+                        {family.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <Users className="h-5 w-5 text-slate-400" />
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => navigate('/family/create')}
+                  className="btn-primary w-full flex items-center justify-center space-x-2"
+                >
+                  <PlusCircle className="w-5 h-5" />
+                  <span>Create Family</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {selectedFamily ? (
+          <div className="glass-card p-8 fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <Wallet className="h-5 w-5 text-emerald-600" />
+                <span>Transactions</span>
+              </h2>
               <button
                 onClick={() => setShowExpenseForm(!showExpenseForm)}
-                className="mb-6 flex items-center gap-2 bg-emerald-500 text-white px-6 py-3 rounded-lg hover:bg-emerald-600 transition-colors"
+                className={`btn-primary flex items-center gap-2 ${showExpenseForm ? 'bg-red-500 hover:bg-red-600 shadow-red-500/25' : 'shadow-emerald-500/25'}`}
               >
-                <PlusCircle className="w-5 h-5" />
-                {showExpenseForm ? "Cancel" : "Add New Expense"}
+                {showExpenseForm ? "Cancel" : (
+                  <>
+                    <PlusCircle className="w-5 h-5" />
+                    <span>Add New Expense</span>
+                  </>
+                )}
               </button>
+            </div>
 
-              {showExpenseForm && (
+            {showExpenseForm && (
+              <div className="mb-8 animate-fade-in-down">
                 <ExpenseForm
                   familyId={selectedFamily._id}
                   onSuccess={() => {
@@ -185,31 +220,46 @@ const SharedExpenses = () => {
                     toast.success("Expense added successfully");
                   }}
                 />
-              )}
+              </div>
+            )}
 
-              {loading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[1, 2, 3].map((n) => (
-                    <div key={n} className="animate-pulse bg-gray-100 rounded-xl p-6 h-48"></div>
-                  ))}
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {sharedExpenses.map((expense) => (
-                    <ExpenseCard key={expense._id} expense={expense} />
-                  ))}
-                </div>
-              )}
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3].map((n) => (
+                  <div key={n} className="h-48 bg-slate-50 rounded-2xl animate-pulse border border-slate-100"></div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sharedExpenses.map((expense) => (
+                  <ExpenseCard key={expense._id} expense={expense} />
+                ))}
+              </div>
+            )}
 
-              {!loading && sharedExpenses.length === 0 && (
-                <div className="text-center py-12">
-                  <DollarSign className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">No shared expenses yet</p>
+            {!loading && sharedExpenses.length === 0 && (
+              <div className="text-center py-16 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+                <div className="bg-slate-100 p-4 rounded-full inline-flex mb-4">
+                  <DollarSign className="w-10 h-10 text-slate-400" />
                 </div>
-              )}
-            </>
-          )}
-        </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">No shared expenses yet</h3>
+                <p className="text-slate-500 max-w-sm mx-auto">
+                  Add an expense to start tracking and splitting costs with your {selectedFamily.name} group.
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          !loading && families.length > 0 && (
+            <div className="text-center py-20 glass-card">
+              <div className="bg-primary-50 p-4 rounded-full inline-flex mb-4">
+                <ArrowRight className="w-8 h-8 text-primary-500" />
+              </div>
+              <h2 className="text-xl font-bold text-slate-900 mb-2">Select a Family</h2>
+              <p className="text-slate-500">Please select a family from the list above to view shared expenses.</p>
+            </div>
+          )
+        )}
       </div>
     </div>
   );
@@ -217,46 +267,52 @@ const SharedExpenses = () => {
 
 const ExpenseCard = ({ expense }) => {
   return (
-    <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-      <div className="flex justify-between items-start">
+    <div className="bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
+      <div className="flex justify-between items-start mb-4">
         <div>
-          <span className="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wide mb-2">
             {expense.category}
           </span>
-          <h3 className="mt-2 font-semibold text-lg">
+          <h3 className="font-bold text-lg text-slate-900 line-clamp-2 leading-tight">
             {expense.description}
           </h3>
         </div>
-        <span className="text-xl font-bold text-emerald-600">
-          ${expense.amount}
-        </span>
+        <div className="text-right pl-4">
+          <span className="text-xl font-bold text-slate-900 block">
+            ${expense.amount}
+          </span>
+        </div>
       </div>
 
-      <div className="pt-4 border-t border-gray-200">
-        <div className="flex items-center gap-2 text-gray-600 mb-2">
-          <Users className="w-4 h-4" />
-          <span>Split Details</span>
+      <div className="pt-4 border-t border-slate-100">
+        <div className="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase tracking-wider mb-3">
+          <PieChart className="w-4 h-4" />
+          <span>Split Breakdown</span>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar">
           {expense.splits?.map((split) => (
             <div
               key={split._id}
-              className="flex justify-between text-sm"
+              className="flex justify-between items-center text-sm p-2 rounded-lg bg-slate-50 border border-slate-100"
             >
-              <span>{split.user?.name}</span>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">
+                  {split.user?.name?.charAt(0)}
+                </div>
+                <span className="text-slate-700 font-medium truncate max-w-[80px]">{split.user?.name}</span>
+              </div>
               <span
                 className={`
-                ${
-                  split.status === "pending"
-                    ? "text-yellow-600"
+                text-xs font-bold px-2 py-0.5 rounded
+                ${split.status === "pending"
+                    ? "text-yellow-700 bg-yellow-50"
                     : split.status === "paid"
-                    ? "text-green-600"
-                    : "text-red-600"
-                }
-                font-medium
+                      ? "text-green-700 bg-green-50"
+                      : "text-red-700 bg-red-50"
+                  }
               `}
               >
-                ${split.amount} • {split.status}
+                ${split.amount}
               </span>
             </div>
           ))}
@@ -282,7 +338,7 @@ const ExpenseForm = ({ familyId, onSuccess }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/shared-expenses`,
+        `${BASE_URL}/shared-expenses`,
         { ...formData, familyGroupId: familyId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -310,27 +366,37 @@ const ExpenseForm = ({ familyId, onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-50 rounded-xl p-6 mb-8">
+    <form onSubmit={handleSubmit} className="bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-inner">
+      <h4 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+        <PlusCircle className="h-5 w-5 text-primary-600" />
+        New Expense Details
+      </h4>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
             Amount
           </label>
-          <input
-            type="number"
-            value={formData.amount}
-            onChange={(e) =>
-              setFormData({ ...formData, amount: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
-            required
-            min="0"
-            step="0.01"
-          />
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <DollarSign className="h-4 w-4 text-slate-400" />
+            </div>
+            <input
+              type="number"
+              value={formData.amount}
+              onChange={(e) =>
+                setFormData({ ...formData, amount: e.target.value })
+              }
+              className="input-primary pl-10"
+              placeholder="0.00"
+              required
+              min="0"
+              step="0.01"
+            />
+          </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
             Category
           </label>
           <select
@@ -338,7 +404,7 @@ const ExpenseForm = ({ familyId, onSuccess }) => {
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+            className="input-primary"
             required
           >
             <option value="">Select Category</option>
@@ -351,7 +417,7 @@ const ExpenseForm = ({ familyId, onSuccess }) => {
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
             Description
           </label>
           <input
@@ -360,38 +426,52 @@ const ExpenseForm = ({ familyId, onSuccess }) => {
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+            className="input-primary"
+            placeholder="What was this expense for?"
             required
           />
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 mb-2">
             Split Type
           </label>
-          <select
-            value={formData.splitType}
-            onChange={(e) =>
-              setFormData({ ...formData, splitType: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
-            required
-          >
-            <option value="equal">Split Equally</option>
-            <option value="percentage">Split by Percentage</option>
-            <option value="custom">Custom Split</option>
-          </select>
+          <div className="relative">
+            <select
+              value={formData.splitType}
+              onChange={(e) =>
+                setFormData({ ...formData, splitType: e.target.value })
+              }
+              className="input-primary appearance-none"
+              required
+            >
+              <option value="equal">Split Equally</option>
+              <option value="percentage">Split by Percentage</option>
+              <option value="custom">Custom Split</option>
+            </select>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <PieChart className="h-4 w-4 text-slate-400" />
+            </div>
+          </div>
         </div>
       </div>
 
       <button
         type="submit"
         disabled={submitting}
-        className={`mt-6 w-full bg-emerald-500 text-white py-2 px-4 rounded-lg transition-colors ${
-          submitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'
-        }`}
+        className="mt-8 btn-success w-full flex items-center justify-center space-x-2 py-3"
       >
-        {submitting ? 'Creating...' : 'Create Expense'}
+        {submitting ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <span>Creating...</span>
+          </>
+        ) : (
+          <>
+            <PlusCircle className="w-5 h-5" />
+            <span>Create Expense</span>
+          </>
+        )}
       </button>
     </form>
   );

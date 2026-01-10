@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const BASE_URL = 'https://money-mentor-1f1e.onrender.com/api';
-// export const BASE_URL = 'http://localhost:5000/api';
+// export const BASE_URL = 'https://money-mentor-1f1e.onrender.com/api';
+export const BASE_URL = 'http://localhost:5000/api';
 const token = localStorage.getItem('token');
 
 export const login = async (email, password) => {
@@ -64,4 +64,15 @@ export const deleteUser = async () => {
   });
   return response.data;
 }
+
+// Join family via token
+export const joinFamily = async (data) => {
+  const token = localStorage.getItem('token');
+  const response = await axios.post(`${BASE_URL}/family-groups/join`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+  return response.data;
+};
 

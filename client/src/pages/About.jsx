@@ -1,118 +1,116 @@
+import { Target, Lightbulb, Shield, Users, Heart, Zap, Award, Globe } from 'lucide-react';
+
 function About() {
+  const values = [
+    {
+      icon: Shield,
+      title: "Integrity",
+      description: "We believe in doing the right thing, always. Integrity is at the core of everything we do.",
+      gradient: "from-blue-500 to-blue-600"
+    },
+    {
+      icon: Lightbulb,
+      title: "Innovation",
+      description: "We constantly seek new ways to improve our services and offer the best possible solutions to our users.",
+      gradient: "from-purple-500 to-purple-600"
+    },
+    {
+      icon: Globe,
+      title: "Transparency",
+      description: "We are committed to being open and honest in all our interactions with users, partners, and employees.",
+      gradient: "from-emerald-500 to-emerald-600"
+    },
+    {
+      icon: Heart,
+      title: "Customer Focus",
+      description: "Our users are at the heart of everything we do. We strive to exceed their expectations.",
+      gradient: "from-rose-500 to-rose-600"
+    }
+  ];
+
   return (
-      <div className="bg-green-100 text-gray-800 py-16">
-      <div className="container mx-auto px-4">
-        {/* Page Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900">About Us</h1>
-          <p className="mt-4 text-lg text-gray-600">
-            Learn more about our mission, our team, and what drives us to provide the best service for you.
+    <div className="min-h-screen bg-mesh py-16">
+      <div className="container mx-auto px-4 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-16 fade-in-up">
+          <div className="inline-flex items-center justify-center p-3 bg-primary-100 rounded-2xl mb-6">
+            <Users className="h-8 w-8 text-primary-600" />
+          </div>
+          <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
+            <span className="gradient-text-ocean">About Money Mentor</span>
+          </h1>
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Empowering individuals to take control of their financial future through innovative technology and personalized guidance
           </p>
         </div>
 
         {/* Mission Section */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Our Mission</h2>
-          <p className="text-gray-700">
-            At MyFinanceApp, our mission is to empower individuals to take control of their finances. We believe that with the right tools and guidance, everyone can achieve financial independence and security.
-          </p>
-        </div>
-
-        {/* Team Section */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Meet Our Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Team Member 1 */}
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Team Member 1"
-                className="w-32 h-32 rounded-full mx-auto mb-4"
-              />
-              <h3 className="text-lg font-semibold text-gray-900">Bama Charan Chhandogi</h3>
-              <p className="text-gray-500">Devops Engineer</p>
-              <p className="mt-2 text-gray-600">
-              Bama Charan Chhandogi is taking on the role of DevOps Engineer in this project. As a DevOps Engineer, Bama is responsible for bridging the gap between software development and IT operations. This will involve automating processes, implementing continuous integration/continuous deployment (CI/CD) pipelines.
-              </p>
-            </div>
-            {/* Team Member 2 */}
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Team Member 1"
-                className="w-32 h-32 rounded-full mx-auto mb-4"
-              />
-              <h3 className="text-lg font-semibold text-gray-900">Chirag</h3>
-              <p className="text-gray-500">Frontend Engineer</p>
-              <p className="mt-2 text-gray-600">
-              Chirag is assuming the role of Frontend Engineer in this project. As a Frontend Engineer, Chirag focuses on building and optimizing the user-facing components of the application. This includes designing responsive user interfaces, implementing interactive features, ensuring cross-browser compatibility, and working closely with the design team to deliver an intuitive and visually appealing user experience.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Team Member 3"
-                className="w-32 h-32 rounded-full mx-auto mb-4"
-              />
-              <h3 className="text-lg font-semibold text-gray-900">Deepak Kumar</h3>
-              <p className="text-gray-500">UI/UX Engineer</p>
-              <p className="mt-2 text-gray-600">
-              Deepak Kumar is assuming the role of UI/UX Engineer in this project. As a UI/UX Engineer, Deepak focuses on designing user interfaces that are both aesthetically pleasing and functional. Deepak works on improving the overall user experience by conducting user research, creating wireframes, prototyping, and ensuring that the application is intuitive and user-friendly.
-              </p>
-            </div>
-            {/* Team Member 2 */}
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Team Member 2"
-                className="w-32 h-32 rounded-full mx-auto mb-4"
-              />
-              <h3 className="text-lg font-semibold text-gray-900">Bhavik Gaba</h3>
-              <p className="text-gray-500">Backend Engineer</p>
-              <p className="mt-2 text-gray-600">
-              Bhavik Gaba is assuming the role of Backend Engineer in this project. As a Backend Engineer, Bhavik focuses on developing the server-side logic, database interactions, and APIs that power the application's functionality. Bhavik is responsible for ensuring the performance, security, and scalability of the backend systems.
+        <div className="mb-20 fade-in-up" style={{ animationDelay: '0.1s' }}>
+          <div className="glass-card p-12 rounded-3xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 rounded-full blur-3xl"></div>
+            <div className="relative z-10">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="p-3 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl">
+                  <Target className="h-8 w-8 text-white" />
+                </div>
+                <h2 className="text-3xl font-display font-bold text-slate-900">Our Mission</h2>
+              </div>
+              <p className="text-lg text-slate-600 leading-relaxed max-w-4xl">
+                At Money Mentor, our mission is to democratize financial wellness. We believe that with the right tools, insights, and guidance, everyone can achieve financial independence and security. Our platform combines cutting-edge AI technology with intuitive design to make personal finance management accessible, understandable, and actionable for everyone.
               </p>
             </div>
           </div>
         </div>
 
         {/* Values Section */}
-        <div>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Our Values</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Value 1 */}
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Integrity</h3>
-              <p className="text-gray-600">
-                We believe in doing the right thing, always. Integrity is at the core of everything we do.
-              </p>
-            </div>
-
-            {/* Value 2 */}
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Innovation</h3>
-              <p className="text-gray-600">
-                We are constantly seeking new ways to improve our services and offer the best possible solutions to our users.
-              </p>
-            </div>
-
-            {/* Value 3 */}
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Transparency</h3>
-              <p className="text-gray-600">
-                We are committed to being open and honest in all our interactions with our users, partners, and employees.
-              </p>
-            </div>
-
-            {/* Value 4 */}
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Customer Focus</h3>
-              <p className="text-gray-600">
-                Our users are at the heart of everything we do. We strive to understand their needs and deliver solutions that exceed their expectations.
-              </p>
-            </div>
+        <div className="fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-display font-bold text-slate-900 mb-4">Our Core Values</h2>
+            <p className="text-lg text-slate-600">The principles that guide everything we do</p>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {values.map((value, index) => {
+              const Icon = value.icon;
+              return (
+                <div
+                  key={index}
+                  className="glass-card p-8 hover:shadow-2xl transition-all duration-500 group"
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className={`flex-shrink-0 p-4 rounded-2xl bg-gradient-to-br ${value.gradient} group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                      <Icon className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-slate-900 mb-2">{value.title}</h3>
+                      <p className="text-slate-600 leading-relaxed">{value.description}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 fade-in-up" style={{ animationDelay: '0.4s' }}>
+          {[
+            { icon: Users, value: "10K+", label: "Active Users" },
+            { icon: Zap, value: "50K+", label: "Transactions Tracked" },
+            { icon: Award, value: "98%", label: "User Satisfaction" },
+            { icon: Globe, value: "15+", label: "Countries" }
+          ].map((stat, idx) => {
+            const Icon = stat.icon;
+            return (
+              <div key={idx} className="text-center glass-card p-6 hover:shadow-xl transition-all duration-300">
+                <div className="inline-flex p-3 bg-primary-100 rounded-xl mb-3">
+                  <Icon className="h-6 w-6 text-primary-600" />
+                </div>
+                <div className="text-3xl font-bold text-slate-900 mb-1">{stat.value}</div>
+                <div className="text-sm text-slate-500 font-medium">{stat.label}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

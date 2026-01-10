@@ -49,7 +49,7 @@ export const sendOTPEmail = async (email, otp) => {
   };
 
 // Send invitation email to join a family
-export const sendInvitationEmail = async (email, familyName) => {
+export const sendInvitationEmail = async (email, familyName, link) => {
   try {
     // Create a transporter using environment variables
     const transporter = nodemailer.createTransport({
@@ -66,8 +66,8 @@ export const sendInvitationEmail = async (email, familyName) => {
       to: email,
       subject: `Invitation to Join ${familyName} on Finance Manager`,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2c3e50;">Family Finance Invitation</h2>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+          <h2 style="color: #2c3e50; text-align: center;">Family Finance Invitation</h2>
           <p>Hello,</p>
           <p>You've been invited to join <strong>${familyName}</strong> on Finance Manager!</p>
           <p>As a family member, you'll be able to:</p>
@@ -77,22 +77,24 @@ export const sendInvitationEmail = async (email, familyName) => {
             <li>Track shared financial goals</li>
             <li>Collaborate on financial decisions</li>
           </ul>
-          <p>To accept this invitation, please log in to your account and visit the Family section.</p>
-          <div style="margin: 30px 0;">
-            <a href="${process.env.CLIENT_URL}/login" 
-               style="background-color: #3498db; 
+          <p>Click the button below to accept the invitation and join the family:</p>
+          <div style="margin: 30px 0; text-align: center;">
+            <a href="${link}" 
+               style="background-color: #10b981; 
                       color: white; 
                       padding: 12px 24px; 
                       text-decoration: none; 
-                      border-radius: 4px;">
-              Log In Now
+                      border-radius: 6px;
+                      font-weight: bold;
+                      display: inline-block;">
+              Accept Invitation
             </a>
           </div>
           <p style="color: #7f8c8d; font-size: 0.9em;">
-            If you don't have an account yet, you can create one using this email address.
+            This link will expire in 7 days. If you don't have an account, you will be asked to create one.
           </p>
           <hr style="border: 1px solid #eee; margin: 20px 0;">
-          <p style="color: #7f8c8d; font-size: 0.8em;">
+          <p style="color: #7f8c8d; font-size: 0.8em; text-align: center;">
             This is an automated message, please do not reply to this email.
           </p>
         </div>

@@ -22,7 +22,7 @@ import TransactionsPage from "./pages/TransactionsPage";
 import FamilyDashboard from "./components/Family/FamilyDashboard";
 import FamilyLanding from "./components/Family/FamilyLanding";
 import CreateFamily from "./components/Family/CreateFamily";
-import SharedExpensesList from "./components/Family/SharedExpenseForm";
+import JoinFamily from "./pages/JoinFamily";
 
 function App() {
   return (
@@ -53,11 +53,7 @@ function App() {
           <Route path="/family" element={<FamilyLanding />} />
           <Route path="/family/create" element={<CreateFamily />} />
           <Route path="/family/manage" element={<FamilyDashboard />} />
-          <Route path="/family/expenses" element={<SharedExpensesList />} />
-          <Route
-            path="/family/expenses/:familyId"
-            element={<SharedExpensesList />}
-          />
+          <Route path="/join-family" element={<JoinFamily />} />
           <Route path="/ai-dashboard" element={<Dashboard />} />
           <Route path="/financial-advice" element={<FinancialAdvice />} />
           <Route path="/expense-analysis" element={<ExpenseAnalysis />} />

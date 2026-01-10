@@ -1,3 +1,406 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ============================================
+   🎨 PREMIUM DESIGN SYSTEM - MONEY MENTOR
+   ============================================ */
+
+:root {
+  /* 🎨 Primary Brand Colors - Sophisticated Financial Theme */
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+  
+  /* 💎 Accent Colors - Premium Purple/Violet */
+  --color-accent-50: #faf5ff;
+  --color-accent-100: #f3e8ff;
+  --color-accent-200: #e9d5ff;
+  --color-accent-300: #d8b4fe;
+  --color-accent-400: #c084fc;
+  --color-accent-500: #a855f7;
+  --color-accent-600: #9333ea;
+  --color-accent-700: #7e22ce;
+  --color-accent-800: #6b21a8;
+  --color-accent-900: #581c87;
+  
+  /* 💰 Success Colors - Wealth & Growth */
+  --color-success-50: #ecfdf5;
+  --color-success-100: #d1fae5;
+  --color-success-200: #a7f3d0;
+  --color-success-300: #6ee7b7;
+  --color-success-400: #34d399;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+  --color-success-800: #065f46;
+  --color-success-900: #064e3b;
+  
+  /* 🔥 Warning/Expense Colors */
+  --color-warning-50: #fff7ed;
+  --color-warning-100: #ffedd5;
+  --color-warning-200: #fed7aa;
+  --color-warning-300: #fdba74;
+  --color-warning-400: #fb923c;
+  --color-warning-500: #f97316;
+  --color-warning-600: #ea580c;
+  --color-warning-700: #c2410c;
+  --color-warning-800: #9a3412;
+  --color-warning-900: #7c2d12;
+  
+  /* 🌑 Dark Mode Colors */
+  --color-dark-50: #f8fafc;
+  --color-dark-100: #f1f5f9;
+  --color-dark-200: #e2e8f0;
+  --color-dark-300: #cbd5e1;
+  --color-dark-400: #94a3b8;
+  --color-dark-500: #64748b;
+  --color-dark-600: #475569;
+  --color-dark-700: #334155;
+  --color-dark-800: #1e293b;
+  --color-dark-900: #0f172a;
+  
+  /* 🎭 Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-bg-light: rgba(255, 255, 255, 0.7);
+  --glass-bg-dark: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  
+  /* 📐 Spacing & Sizing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  /* 🔤 Typography */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* 🎬 Animations */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* 🌈 Gradients */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --gradient-premium: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  --gradient-ocean: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
+  --gradient-sunset: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%);
+  --gradient-forest: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+  
+  /* 🎯 Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.4);
+  --shadow-glow-success: 0 0 20px rgba(16, 185, 129, 0.4);
+  --shadow-glow-warning: 0 0 20px rgba(251, 146, 60, 0.4);
+}
+
+/* ============================================
+   🎨 BASE STYLES
+   ============================================ */
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50;
+    @apply text-slate-900;
+    @apply font-primary;
+    @apply antialiased;
+    min-height: 100vh;
+    background-attachment: fixed;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+  
+  h4 {
+    @apply text-xl md:text-2xl lg:text-3xl;
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gradient-to-b from-primary-400 to-primary-600 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply from-primary-500 to-primary-700;
+  }
+}
+
+/* ============================================
+   🎨 COMPONENT UTILITIES
+   ============================================ */
+
+@layer components {
+  /* 💎 Glass Card */
+  .glass-card {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    @apply rounded-2xl;
+  }
+  
+  .glass-card-dark {
+    background: var(--glass-bg-dark);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--glass-shadow);
+    @apply rounded-2xl;
+  }
+  
+  /* 🎯 Premium Button */
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl font-semibold text-white;
+    @apply bg-gradient-to-r from-primary-500 to-primary-700;
+    @apply shadow-lg hover:shadow-xl;
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 hover:from-primary-600 hover:to-primary-800;
+    @apply active:scale-95;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-300;
+  }
+  
+  .btn-accent {
+    @apply px-6 py-3 rounded-xl font-semibold text-white;
+    @apply bg-gradient-to-r from-accent-500 to-accent-700;
+    @apply shadow-lg hover:shadow-xl;
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 hover:from-accent-600 hover:to-accent-800;
+    @apply active:scale-95;
+    @apply focus:outline-none focus:ring-4 focus:ring-accent-300;
+  }
+  
+  .btn-success {
+    @apply px-6 py-3 rounded-xl font-semibold text-white;
+    @apply bg-gradient-to-r from-success-500 to-success-700;
+    @apply shadow-lg hover:shadow-xl;
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 hover:from-success-600 hover:to-success-800;
+    @apply active:scale-95;
+    @apply focus:outline-none focus:ring-4 focus:ring-success-300;
+  }
+  
+  .btn-outline {
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply bg-transparent border-2 border-primary-500 text-primary-700;
+    @apply hover:bg-primary-500 hover:text-white;
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 active:scale-95;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-300;
+  }
+  
+  /* 📝 Premium Input */
+  .input-primary {
+    @apply w-full px-4 py-3 rounded-xl;
+    @apply bg-white/80 backdrop-blur-sm;
+    @apply border-2 border-slate-200;
+    @apply focus:border-primary-500 focus:ring-4 focus:ring-primary-100;
+    @apply transition-all duration-300;
+    @apply placeholder:text-slate-400;
+    @apply text-slate-900 font-medium;
+  }
+  
+  /* 💳 Stat Card */
+  .stat-card {
+    @apply glass-card p-6;
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 hover:shadow-2xl;
+    @apply cursor-pointer;
+  }
+  
+  .stat-card-gradient {
+    @apply p-6 rounded-2xl;
+    @apply shadow-xl hover:shadow-2xl;
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 hover:-translate-y-1;
+    @apply cursor-pointer;
+    @apply relative overflow-hidden;
+  }
+  
+  .stat-card-gradient::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+  }
+  
+  .stat-card-gradient:hover::before {
+    @apply opacity-100;
+  }
+  
+  /* 🎨 Gradient Text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-premium);
+  }
+  
+  .gradient-text-ocean {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-ocean);
+  }
+  
+  .gradient-text-success {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-forest);
+  }
+  
+  /* 🌟 Floating Animation */
+  .floating {
+    animation: floating 3s ease-in-out infinite;
+  }
+  
+  @keyframes floating {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* ✨ Pulse Glow */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+    }
+  }
+  
+  /* 🎯 Shimmer Effect */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+  
+  /* 🎪 Fade In Up Animation */
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* 🎭 Scale In Animation */
+  .scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* ============================================
+   🎨 UTILITY CLASSES
+   ============================================ */
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .bg-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 40% 20%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
+  }
+  
+  .bg-mesh {
+    background-color: #f8fafc;
+    background-image: 
+      radial-gradient(at 40% 20%, hsla(217, 91%, 60%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsla(271, 76%, 53%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, hsla(189, 78%, 46%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, hsla(340, 82%, 52%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(22, 93%, 53%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 100%, hsla(142, 76%, 36%, 0.1) 0px, transparent 50%);
+  }
+}
