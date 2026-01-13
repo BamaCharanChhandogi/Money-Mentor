@@ -2,109 +2,72 @@
 
 ### Introduction
 
-Money-Mentor is an enhanced personal finance management tool that empowers users to take control of their financial lives.
+Money-Mentor is a premium personal finance management ecosystem that empowers users to take full control of their financial journeys through real-time data, collaborative tools, and AI-driven insights.
 
-### Features
+### 💎 Key Features & Innovations
 
-- **Expense tracking and budgeting:** Track expenses, income, and create budgets to stay on top of finances.
-- **Bank account integration and transaction categorization:** Connect bank accounts for automatic transaction import and categorization to streamline expense monitoring.
-- **Investment portfolio tracking and performance analysis:** Monitor investment performance, track portfolio value, and receive tailored advice.
-- **AI-driven financial advice:** Get personalized financial insights, savings strategies, and investment recommendations tailored to individual financial goals.
-- **Secure data handling and encryption:** Protect sensitive financial data with end-to-end encryption, secure authentication, and robust permission systems.
-- **Insurance management and AI-powered recommendations:** Manage insurance policies, compare providers, and get AI-driven recommendations for optimal coverage.
+- **🚀 Real-Time Bank Integration (Plaid):** Securely connect multiple bank accounts to sync balances and transactions instantly. Includes a secure "Disconnect" feature to wipe synced data on demand.
+- **📊 Advanced Multi-Period Budgeting:** Smart budgeting with support for **Weekly, Monthly, and Yearly** targets. Includes **Rollover Bonuses** where unspent monthly budgets boost your next month's funds.
+- **🏠 Household Hub (Family Groups):** Create financial groups to manage household expenses together. Invite members, assign roles (Admin/Member), and split shared expenses with real-time notifications.
+- **🧠 Smart Categorization:** Intelligent expense logging with standardized categories and real-time dropdowns to ensure consistent financial reporting.
+- **📈 Comprehensive Investment Tracking:** Monitor stocks, crypto, and ETFs with real-time price updates and performance analytics (Total Return, Annualized Gain).
+- **📉 Financial Health Score:** A dynamic 0-100 score that analyzes your savings buffer, investment ratio, and tracking consistency to give you a snapshot of your financial wellness.
+- **✨ Premium Glassmorphism UI:** A state-of-the-art interface built with modern typography, smooth gradients, and a responsive design system.
 
-### Detailed Implementation Plan
+### 🛡️ Detailed Implementation
 
-#### 1. Expense Tracking and Budgeting
-- Create schemas for expenses, income, and budgets
-- Implement CRUD operations for financial transactions
-- Develop budget creation and tracking functionality
-- Add visualizations for spending patterns and budget adherence
+#### 1. Smart Expense & Budgeting Engine
+- **Multi-Period Logic:** Weekly budgets track from Monday; Yearly budgets aggregate 12-month data.
+- **Rollover System:** Automatically detects surplus from previous months and updates your "available to spend" pool.
+- **Visual Feedback:** Premium Recharts integration with "Danger/Warning" color-coding when approaching budget limits.
 
-#### 2. Bank Account Integration and Transaction Categorization
-- Integrate with banking APIs (e.g., Plaid)
-- Implement automatic transaction import and synchronization
-- Develop an AI-based categorization system for transactions
-- Allow manual category overrides and custom category creation
+#### 2. Banking & Security
+- **Plaid Integration:** OAuth-based bank linking with automated transaction fetching.
+- **Data Privacy:** One-click account disconnection which cascadingly deletes all cached bank transactions and tokens.
+- **Currency Standardization:** Unified `$` formatting across all modules with `.toLocaleString()` precision.
 
-#### 3. Investment Portfolio Tracking
-- Create schemas for various investment types (stocks, bonds, crypto, etc.)
-- Integrate with financial market APIs
-- Implement portfolio performance calculations and visualizations
-- Add alerts for significant market changes or portfolio milestones
+#### 3. Family Hub & Collaboration
+- **Dynamic Invitations:** Token-based invite system for joining family groups securely.
+- **Expense Splitting:** Shared expenses can be split equally or with custom logic, appearing instantly in the Family Dashboard.
+- **Real-Time Sync**: Socket.io integration for instant updates when a family member adds a shared expense or goal.
 
-#### 4. AI-driven Financial Advice
-- Develop machine learning models for personalized financial insights
-- Implement recommendation engine for savings and investment strategies
-- Create a user-friendly chat interface for answering financial questions
-- Integrate with external financial news APIs for contextual advice
+#### 4. Investment & Asset Management
+- **Market Data**: Integration with financial APIs for live price fetching of symbols.
+- **Portfolio Analytics**: Automatic calculation of current value against purchase price to show Unrealized Gains.
 
-#### 5. Secure Data Handling and Encryption
-- Implement end-to-end encryption for sensitive financial data
-- Use secure authentication (e.g., OAuth 2.0, 2FA)
-- Develop a robust permission system for data access
-- Implement secure API endpoints with rate limiting and HTTPS
+### 🛠️ Tech Stack
 
-#### 6. Insurance Management and AI-Powered Recommendations
-- Create schemas for various insurance types
-- Implement CRUD operations for insurance policies
-- Develop AI system for analyzing user data and recommending optimal coverage
-- Create comparison tool for insurance providers and policies
-- Implement predictive modeling for future insurance needs
-- Integrate AI for fraud detection in insurance claims
+- **Frontend:** React.js, Vite, Tailwind CSS, Lucide Icons, Recharts
+- **Backend:** Node.js, Express, MongoDB (Mongoose)
+- **Real-Time:** Socket.io
+- **APIs:** Plaid (Banking), Financial Market APIs
+- **Authentication:** JWT with standard-compliant Auth Middleware
 
-#### AI Integration in Insurance Section
-- Use machine learning for personalized insurance recommendations based on user's financial profile, lifestyle, and risk factors
-- Implement natural language processing for understanding and categorizing insurance policy documents
-- Develop AI-driven claims prediction model to estimate likelihood of future claims
-- Create user-friendly chat interface for insurance-related queries and guidance
-- Utilize AI for fraud detection in insurance claims
+### 🚀 Installation & Setup
 
-### Backend Evolution Stages
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/money-mentor.git
+   ```
 
-1. Basic CRUD operations and data storage
-2. Integration of external APIs (banking, investment, insurance)
-3. Implementation of basic AI models for categorization and recommendations
-4. Development of advanced AI features (chatbot, predictive modeling)
-5. Optimization of database queries and implementation of caching
-6. Migration to microservices architecture for improved scalability
-7. Implementation of real-time updates using WebSockets
-8. Continuous enhancement of security measures and encryption techniques
-
-### Data Flow Diagram
-
-[Image of data flow diagram]
-
-### Installation
-
-1. Clone the repository: `git clone https://github.com/your-username/money-mentor.git`
-2. Install server dependencies:
+2. **Backend Setup:**
    - `cd server`
    - `npm install`
-   - `npm run dev`
-3. Install client dependencies:
+   - Create a `.env` file with: `PORT`, `MONGO_URI`, `JWT_SECRET`, `PLAID_CLIENT_ID`, `PLAID_SECRET`, `PLAID_ENV`.
+   - `npm run dev` (Runs on `http://localhost:5000`)
+
+3. **Frontend Setup:**
    - `cd client`
    - `npm install`
-   - `npm start`
-4. Create a `.env` file in the backend folder and provide appropriate configuration details.
+   - `npm run dev` (Runs on `http://localhost:5173`)
 
-### Usage
+### 🤝 Contribution Guidelines
 
-- **Frontend:** Access the frontend at `http://localhost:3000`
-- **Backend API:** Access the backend API at `http://localhost:5000`
-- **Testing:** Use tools like Postman to test API endpoints
-- **API documentation:** Refer to the API documentation (typically found at `/api-docs`) for available routes and request/response formats.
+We welcome contributions!
+- Fork the repository and create a feature branch.
+- Ensure your code follows the premium glassmorphism design tokens in `index.css`.
+- Submit a PR with a detailed description of your changes.
 
-### Contribution Guidelines
-
-Contributions are welcome. Please adhere to the following guidelines:
-- Fork the repository.
-- Create a new branch for your changes.
-- Write clear and concise commit messages.
-- Adhere to the coding standards.
-- Submit a pull request for review.
-
-### License
-
-This project is licensed under the MIT License.
-Thank you
+---
+**Money-Mentor** — *Smart Finance Management for the Modern World.*
+Thank you!
