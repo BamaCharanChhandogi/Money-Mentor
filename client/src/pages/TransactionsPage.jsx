@@ -77,30 +77,43 @@ const TransactionsPage = () => {
   }, []);
 
   const handleExport = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${BASE_URL}/transactions/export`, {
-        params: exportOptions,
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        responseType: 'blob'
-      });
+  const token = localStorage.getItem("token");
+  if (!token) return;
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      const filename = `transactions_${new Date().toISOString().split('T')[0]}.${exportOptions.format}`;
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      setIsExportModalOpen(false);
-    } catch (error) {
-      console.error('Export error:', error);
-    }
-  };
+  try {
+    const config = {
+      params: exportOptions,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      responseType: "blob",
+    };
+
+    const { data } = await axios.get(
+      `${BASE_URL}/transactions/export`,
+      config
+    );
+
+    const blob = new Blob([data]);
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    const fileDate = new Date().toISOString().split("T")[0];
+    const filename = `transactions_${fileDate}.${exportOptions.format}`;
+
+    link.href = url;
+    link.setAttribute("download", filename);
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setIsExportModalOpen(false);
+  } catch (err) {
+    console.error("Export error:", err);
+  }
+};
 
   const handleAddTransaction = async () => {
     try {
