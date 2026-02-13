@@ -91,9 +91,10 @@ function Services() {
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
-              <div
+              <Link
                 key={index}
-                className="group glass-card p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 fade-in-up"
+                to={service.link}
+                className="block group glass-card p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 fade-in-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {/* Icon */}
@@ -122,14 +123,11 @@ function Services() {
                 </div>
 
                 {/* CTA Link */}
-                <Link
-                  to={service.link}
-                  className="inline-flex items-center space-x-2 text-primary-600 font-semibold hover:text-primary-700 group/link"
-                >
+                <div className="inline-flex items-center space-x-2 text-primary-600 font-semibold group-hover:text-primary-700 group/link">
                   <span>{service.linkText}</span>
                   <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
-                </Link>
-              </div>
+                </div>
+              </Link>
             );
           })}
         </div>
