@@ -639,7 +639,7 @@ const ExpenseCard = ({ expense, currentUserId, isFamilyOwner, onDelete }) => {
                   }
               `}
               >
-                ${split.amount} • {split.status.toUpperCase()}
+                ${Number(split.amount).toFixed(2)} • {split.status.toUpperCase()}
               </span>
             </div>
           ))}
@@ -669,13 +669,6 @@ const ExpenseForm = ({ familyId, onSuccess }) => {
         { ...formData, familyGroupId: familyId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      if (socket) {
-        socket.emit("create_shared_expense", {
-          familyGroupId: familyId,
-          ...response.data.sharedExpense,
-        });
-      }
 
       onSuccess();
       setFormData({
