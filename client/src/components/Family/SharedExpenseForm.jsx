@@ -279,7 +279,7 @@ const ExpenseCard = ({ expense }) => {
         </div>
         <div className="text-right pl-4">
           <span className="text-xl font-bold text-slate-900 block">
-            ${expense.amount}
+            ${Number(expense.amount).toFixed(2)}
           </span>
         </div>
       </div>
@@ -312,7 +312,7 @@ const ExpenseCard = ({ expense }) => {
                   }
               `}
               >
-                ${split.amount}
+                ${Number(split.amount).toFixed(2)}
               </span>
             </div>
           ))}
@@ -343,12 +343,6 @@ const ExpenseForm = ({ familyId, onSuccess }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      if (socket) {
-        socket.emit("create_shared_expense", {
-          familyGroupId: familyId,
-          ...response.data.sharedExpense,
-        });
-      }
 
       onSuccess();
       setFormData({
