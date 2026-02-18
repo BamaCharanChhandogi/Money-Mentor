@@ -71,95 +71,114 @@ function Services() {
   ];
 
   return (
-    <div className="min-h-screen bg-mesh py-16">
-      <div className="container mx-auto px-4 lg:px-8">
-        {/* Header Section */}
-        <div className="text-center mb-16 fade-in-up">
-          <div className="inline-flex items-center justify-center p-3 bg-primary-100 rounded-2xl mb-6">
-            <Sparkles className="h-8 w-8 text-primary-600" />
+    <div className="min-h-screen bg-slate-50 overflow-hidden">
+      
+      {/* Premium Hero Section */}
+      <div className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 overflow-hidden bg-slate-900 border-b border-slate-800/50">
+        {/* Animated Background Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary-600/20 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-10">
+            <div className="w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at center, #ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
           </div>
-          <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
-            <span className="gradient-text-ocean">Our Financial Services</span>
-          </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Empowering your financial journey with cutting-edge technology and personalized solutions
-          </p>
         </div>
 
+        <div className="container mx-auto px-4 lg:px-8 relative z-10 text-center fade-in-up">
+          <div className="inline-flex items-center justify-center p-3 bg-white/5 border border-white/10 rounded-2xl mb-8 backdrop-blur-md shadow-2xl">
+            <Sparkles className="h-6 w-6 text-primary-400 mr-3" />
+            <span className="text-primary-300 font-semibold tracking-wide uppercase text-sm">Premium Features</span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 text-white tracking-tight">
+            Elevate Your <span className="gradient-text-ocean inline-block">Financial Hub</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+            Empowering your journey with cutting-edge technology, AI insights, and personalized wealth management solutions.
+          </p>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 lg:px-8 -mt-16 relative z-20 pb-24">
         {/* Services Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-24">
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
               <Link
                 key={index}
                 to={service.link}
-                className="block group glass-card p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 fade-in-up"
+                className="group relative bg-white/80 backdrop-blur-xl border border-slate-200/60 rounded-3xl p-8 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-2 fade-in-up overflow-hidden"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                {/* Icon */}
-                <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${service.gradient} mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                  <Icon className="h-8 w-8 text-white" />
-                </div>
-
-                {/* Title */}
-                <h2 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-primary-600 transition-colors">
-                  {service.title}
-                </h2>
-
-                {/* Description */}
-                <p className="text-slate-600 mb-6 leading-relaxed">
-                  {service.description}
-                </p>
-
-                {/* Features */}
-                <div className="space-y-2 mb-6">
-                  {service.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center text-sm text-slate-500">
-                      <CheckCircle2 className="h-4 w-4 text-success-500 mr-2" />
-                      <span>{feature}</span>
+                {/* Hover Gradient Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-slate-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Content Container */}
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-8">
+                    <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-br ${service.gradient} shadow-lg shadow-${service.gradient.split('-')[1]}-500/30 group-hover:scale-110 transition-transform duration-500`}>
+                      <Icon className="h-8 w-8 text-white" />
                     </div>
-                  ))}
-                </div>
+                    <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors group-hover:rotate-45">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                  </div>
 
-                {/* CTA Link */}
-                <div className="inline-flex items-center space-x-2 text-primary-600 font-semibold group-hover:text-primary-700 group/link">
-                  <span>{service.linkText}</span>
-                  <ArrowRight className="h-4 w-4 group-hover/link:translate-x-1 transition-transform" />
+                  <h2 className="text-2xl font-display font-bold text-slate-900 mb-4 group-hover:text-primary-600 transition-colors">
+                    {service.title}
+                  </h2>
+
+                  <p className="text-slate-600 mb-8 leading-relaxed line-clamp-3">
+                    {service.description}
+                  </p>
+
+                  <div className="space-y-3">
+                    {service.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-center text-sm font-medium text-slate-700 bg-slate-50 px-3 py-2 rounded-lg border border-slate-100 group-hover:border-primary-100 group-hover:bg-primary-50/50 transition-colors">
+                        <CheckCircle2 className="h-4 w-4 text-primary-500 mr-2 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </Link>
             );
           })}
         </div>
 
-        {/* CTA Section */}
+        {/* Dynamic CTA Section */}
         <div className="fade-in-up" style={{ animationDelay: '0.6s' }}>
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-600 via-primary-700 to-accent-600 p-12 text-center shadow-2xl">
-            {/* Decorative Elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-500/20 rounded-full blur-3xl"></div>
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-slate-900 p-12 lg:p-16 shadow-2xl group">
+            {/* Dynamic Background */}
+            <div className="absolute inset-0 opacity-80 transition-opacity duration-700 group-hover:opacity-100">
+              <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-primary-600 to-primary-900 rounded-full blur-[80px] mix-blend-screen" />
+              <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-accent-600 to-accent-900 rounded-full blur-[80px] mix-blend-screen" />
+            </div>
 
-            <div className="relative z-10">
-              <div className="inline-flex items-center justify-center p-3 bg-white/20 rounded-2xl mb-6 backdrop-blur-sm">
-                <Users className="h-8 w-8 text-white" />
+            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+              <div className="lg:w-1/2 text-center lg:text-left space-y-6">
+                <div className="inline-flex items-center justify-center p-4 bg-white/10 rounded-2xl backdrop-blur-md border border-white/20 shadow-xl group-hover:scale-105 transition-transform duration-500">
+                  <Users className="h-8 w-8 text-primary-300" />
+                </div>
+                <h3 className="text-4xl md:text-5xl font-display font-bold text-white leading-tight">
+                  Manage Family Finances Together
+                </h3>
+                <p className="text-lg text-slate-300 max-w-xl mx-auto lg:mx-0">
+                  Collaborate securely with your family. Share budgets, track joint expenses, and build a unified financial legacy seamlessly.
+                </p>
               </div>
-              <h3 className="text-4xl font-display font-bold text-white mb-4">
-                Manage Family Finances Together
-              </h3>
-              <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Collaborate with family members, share budgets, split expenses, and achieve financial goals together
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+              <div className="lg:w-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                 <Link
                   to="/family"
-                  className="inline-flex items-center justify-center space-x-2 px-8 py-4 bg-white text-primary-700 rounded-xl font-bold hover:bg-slate-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                  className="inline-flex items-center justify-center space-x-2 px-8 py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-primary-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 w-full sm:w-auto"
                 >
-                  <span>Get Started</span>
+                  <span>Get Started Now</span>
                   <ArrowRight className="h-5 w-5" />
                 </Link>
                 <Link
                   to="/about"
-                  className="inline-flex items-center justify-center space-x-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-white/20 transition-all duration-300 border-2 border-white/30"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-xl font-bold hover:bg-white/20 transition-all duration-300 border border-white/30 w-full sm:w-auto"
                 >
                   <span>Learn More</span>
                 </Link>
@@ -169,21 +188,23 @@ function Services() {
         </div>
 
         {/* Trust Indicators */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 fade-in-up" style={{ animationDelay: '0.7s' }}>
+        <div className="mt-24 grid grid-cols-2 lg:grid-cols-4 gap-6 fade-in-up" style={{ animationDelay: '0.8s' }}>
           {[
             { icon: Shield, label: "Bank-Level Security", value: "256-bit SSL" },
-            { icon: Users, label: "Active Users", value: "10,000+" },
-            { icon: TrendingUp, label: "Avg. Savings", value: "$2,400/yr" },
-            { icon: Sparkles, label: "AI Accuracy", value: "98%" }
+            { icon: Users, label: "Active Investors", value: "10,000+" },
+            { icon: TrendingUp, label: "Avg. ROI Tracked", value: "14.2%" },
+            { icon: Brain, label: "AI Insights Generated", value: "1M+" }
           ].map((stat, idx) => {
             const Icon = stat.icon;
             return (
-              <div key={idx} className="text-center">
-                <div className="inline-flex p-3 bg-slate-100 rounded-xl mb-3">
+              <div key={idx} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex items-center space-x-5">
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary-50 flex items-center justify-center">
                   <Icon className="h-6 w-6 text-primary-600" />
                 </div>
-                <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
-                <div className="text-sm text-slate-500">{stat.label}</div>
+                <div>
+                  <div className="text-2xl font-display font-bold text-slate-900">{stat.value}</div>
+                  <div className="text-sm font-medium text-slate-500">{stat.label}</div>
+                </div>
               </div>
             );
           })}
