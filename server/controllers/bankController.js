@@ -1,4 +1,5 @@
 import BankAccount from "../models/bankModel.js";
+// add a new bank account
 export const addBankAccount = async(req,res)=>{
     try {
         const bankAccount = new BankAccount({

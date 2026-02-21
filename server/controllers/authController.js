@@ -7,6 +7,7 @@ import {
   sendOTPEmail,
 } from "../utils/index.js";
 
+// Register a new user
 export const register = async (req, res) => {
   try {
     const {
