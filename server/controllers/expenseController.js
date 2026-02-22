@@ -1,12 +1,17 @@
   import Expense from '../models/expenseModel.js';
+  /**
+   * Adds a new personal expense record
+   * @param {Object} req - The Express request object.
+   * @param {Object} res - The Express response object.
+   */
   export const postExpense = async (req, res) => {
     try { 
-      const expense = new Expense({
+      const newExpenseEntry = new Expense({
         ...req.body,
         user: req.user._id,
       });
-      await expense.save();
-      res.status(201).send(expense);
+      await newExpenseEntry.save();
+      res.status(201).send(newExpenseEntry);
     } catch (error) {
       res.status(400).send(error);
     }
