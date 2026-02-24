@@ -3,21 +3,26 @@ import Users from '../models/userModel.js';
 import { sendInvitationEmail } from '../utils/index.js';
 import crypto from 'crypto';
 
-// Create a new family group
+/**
+ * Intializes a new family group and sets the current user as the owner.
+ *
+ * @param {Object} req - The Express request object.
+ * @param {Object} res - The Express response object.
+ */
 export const createFamily = async (req, res) => {
   try {
     const { name } = req.body;
-    const family = new FamilyGroup({
+    const newFamilyGroup = new FamilyGroup({
       name,
       owner: req.user.id,
       members: [{ user: req.user.id, role: 'owner', status: 'active' }]
     });
-    await family.save();
+    await newFamilyGroup.save();
     
     // Populate user details
-    await family.populate('members.user', 'name email');
+    await newFamilyGroup.populate('members.user', 'name email');
     
-    res.status(201).json({ success: true, family });
+    res.status(201).json({ success: true, family: newFamilyGroup });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

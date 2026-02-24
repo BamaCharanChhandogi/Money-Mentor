@@ -2,6 +2,14 @@
 import SharedExpense from '../models/sharedExpenseModel.js';
 import FamilyGroup from '../models/familyGroupModel.js';
 
+/**
+ * Creates a new expense that is shared among the family group members.
+ * Validates the family group membership before creating the expense record.
+ * Generates an automatic split based on the selected split type.
+ *
+ * @param {Object} req - The Express request object.
+ * @param {Object} res - The Express response object.
+ */
 export const createSharedExpense = async (req, res) => {
   try {
     const { familyGroupId, amount, category, description, splitType, splits } = req.body;
