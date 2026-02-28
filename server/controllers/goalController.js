@@ -1,6 +1,13 @@
 import Goal from '../models/Goal.js';
 import FamilyGroup from '../models/familyGroupModel.js';
 
+/**
+ * Creates a new financial goal for a family group.
+ * Ensures that the executing user is a member of the target family group.
+ *
+ * @param {Object} req - Express request object containing goal data
+ * @param {Object} res - Express response object
+ */
 export const createGoal = async (req, res) => {
   try {
     const { name, targetAmount, deadline, familyGroupId, icon } = req.body;
