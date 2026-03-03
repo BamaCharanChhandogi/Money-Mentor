@@ -46,7 +46,7 @@ export const register = async (req, res) => {
     const otpExpires = Date.now() + 10 * 60 * 1000;
     sendOTPEmail(email, otp);
 
-    const hashPassword = await hashString(password);  // Hash the validated password
+    const hashPassword = await hashString(password); // Hash the validated password
     const user = new Users({
       name,
       email,
@@ -151,7 +151,7 @@ export const logout = async (req, res) => {
 };
 export const getUser = async (req, res) => {
   try {
-    const user = await Users.findById(req.user.id).select('-password');
+    const user = await Users.findById(req.user.id).select("-password");
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
@@ -166,7 +166,19 @@ export const updateUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
-    const { name, email, phone, dateOfBirth, occupation, annualIncome, maritalStatus, dependents, ownHome, ownCar, healthConditions } = req.body;
+    const {
+      name,
+      email,
+      phone,
+      dateOfBirth,
+      occupation,
+      annualIncome,
+      maritalStatus,
+      dependents,
+      ownHome,
+      ownCar,
+      healthConditions,
+    } = req.body;
     user.name = name || user.name;
     user.email = email || user.email;
     user.phone = phone || user.phone;
@@ -180,11 +192,10 @@ export const updateUser = async (req, res) => {
     user.healthConditions = healthConditions || user.healthConditions;
     await user.save();
     res.status(200).json({ success: true, user });
-  }
-  catch (err) {
+  } catch (err) {
     res.status(500).json({ msg: err.message });
   }
-}
+};
 export const deleteUser = async (req, res) => {
   try {
     const user = await Users.findById(req.user.id);
@@ -193,8 +204,7 @@ export const deleteUser = async (req, res) => {
     }
     await user.deleteOne();
     res.status(200).json({ success: true, message: "User deleted" });
-  }
-  catch (err) {
+  } catch (err) {
     res.status(500).json({ msg: err.message });
   }
-}
+};
