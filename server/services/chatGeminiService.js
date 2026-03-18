@@ -3,9 +3,10 @@ import {GoogleGenerativeAI} from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function getFinancialAdvice(userContext, userMessage) {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-  const prompt = `
+    const prompt = `
 You are an AI financial advisor. Use the following user context to provide personalized financial advice:
 
 ${JSON.stringify(userContext, null, 2)}
@@ -16,7 +17,14 @@ Provide a concise, helpful response addressing the user's question and consideri
 If the question is not related to finance, politely redirect the conversation to financial topics.
 `;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  return response.text();
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Error in chatbot getFinancialAdvice:", error);
+    if (error.status === 429) {
+      return "I'm currently receiving too many requests. Please wait a moment and try again.";
+    }
+    return "I'm sorry, I encountered an error while processing your request. Please try again later.";
+  }
 };

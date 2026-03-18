@@ -52,13 +52,11 @@ export async function analyzeBudgetAdherence(userId) {
 }
 
 export async function getFinancialAdvice(financialData) {
+  try {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-// Access your API key as an environment variable (see "Set up your API key" above)
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  // For text-only input, use the gemini-pro model
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-  const prompt = `
+    const prompt = `
 As a financial advisor, provide personalized advice based on the following financial data:
 
 ${JSON.stringify(financialData, null, 2)}
@@ -73,8 +71,14 @@ Please provide advice on:
 Give specific, actionable advice tailored to this individual's financial situation.
 `;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = response.text();
-  return text;
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Error in getFinancialAdvice:", error);
+    if (error.status === 429) {
+      return "The AI service is currently reaching its free-tier limits (Quota Exceeded). Please try again in a few minutes.";
+    }
+    return "I'm sorry, I couldn't generate advice at this time. Please check your connection or try again later.";
+  }
 }
