@@ -54,7 +54,7 @@ export async function analyzeBudgetAdherence(userId) {
 export async function getFinancialAdvice(financialData) {
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite-preview" });
 
     const prompt = `
 As a financial advisor, provide personalized advice based on the following financial data:

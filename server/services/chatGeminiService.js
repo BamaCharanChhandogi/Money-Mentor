@@ -3,7 +3,7 @@ import {GoogleGenerativeAI} from "@google/generative-ai";
 export async function getFinancialAdvice(userContext, userMessage) {
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite-preview" });
 
     const prompt = `
 You are an AI financial advisor. Use the following user context to provide personalized financial advice:
@@ -24,6 +24,6 @@ If the question is not related to finance, politely redirect the conversation to
     if (error.status === 429) {
       return "I'm currently receiving too many requests. Please wait a moment and try again.";
     }
-    return `I'm sorry, I encountered an error while processing your request: ${error.message}. Please try again later.`;
+    return "I'm sorry, I encountered an error while processing your request. Please try again later.";
   }
 };
