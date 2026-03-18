@@ -160,7 +160,7 @@ const BudgetDashboard = () => {
 
   useEffect(() => {
     fetchBudgets();
-  }, [editingBudget, newBudget]);
+  }, [editingBudget === null]); // Only re-fetch after modal closes or after an update
 
   const fetchBudgets = async () => {
     setLoading(true);
@@ -230,8 +230,17 @@ const BudgetDashboard = () => {
 
         if (budget.period === 'monthly') {
           calculatedSpent[cat] = stats.monthly;
-          const remainingLast = budget.amount - stats.lastMonth;
-          if (remainingLast > 0) rollovers[cat] = remainingLast;
+          // Only apply rollover if we actually have expense data for last month
+          // to avoid "doubling" the budget for new users/months
+          const hasLastMonthData = expensesData.some(exp => {
+            const expDate = new Date(exp.date);
+            return expDate.getMonth() === lastMonth && expDate.getFullYear() === lastMonthYear;
+          });
+
+          if (hasLastMonthData) {
+            const remainingLast = budget.amount - stats.lastMonth;
+            if (remainingLast > 0) rollovers[cat] = remainingLast;
+          }
         } else if (budget.period === 'weekly') {
           calculatedSpent[cat] = stats.weekly;
         } else if (budget.period === 'yearly') {

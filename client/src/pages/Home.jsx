@@ -14,12 +14,14 @@ import {
   Eye,
   EyeOff,
   Sparkles,
+  LogIn,
 } from "lucide-react";
 import { BASE_URL } from "../api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FinancialHealthScore from "../components/FinancialHealthScore";
 
 function Home() {
+  const navigate = useNavigate();
   const [financialData, setFinancialData] = useState({
     totalBalance: 0,
     monthlyExpenses: 0,
@@ -28,10 +30,18 @@ function Home() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isUnauthenticated, setIsUnauthenticated] = useState(false);
   const [showBalance, setShowBalance] = useState(true);
 
   useEffect(() => {
     const fetchFinancialData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setIsUnauthenticated(true);
+        setLoading(false);
+        return;
+      }
+
       try {
         const [
           balanceResponse,
@@ -41,22 +51,22 @@ function Home() {
         ] = await Promise.all([
           axios.get(`${BASE_URL}/bank-accounts`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }),
           axios.get(`${BASE_URL}/expenses`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }),
           axios.get(`${BASE_URL}/investments`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }),
           axios.get(`${BASE_URL}/transactions`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }),
         ]);
@@ -76,7 +86,11 @@ function Home() {
         setLoading(false);
       } catch (err) {
         console.error("Error fetching financial data:", err);
-        setError("Failed to load financial data");
+        if (err.response?.status === 401) {
+          setIsUnauthenticated(true);
+        } else {
+          setError("Failed to load financial data");
+        }
         setLoading(false);
       }
     };
@@ -97,6 +111,27 @@ function Home() {
         <div className="glass-card p-12 text-center scale-in">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary-500 border-t-transparent mx-auto mb-4"></div>
           <p className="text-xl font-semibold text-slate-700">Loading your financial dashboard...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (isUnauthenticated) {
+    return (
+      <section className="min-h-screen bg-mesh flex items-center justify-center">
+        <div className="glass-card p-12 text-center max-w-sm scale-in shadow-xl border border-white/20">
+          <h2 className="text-2xl font-display font-bold text-slate-900 mb-2">
+            Welcome to Money-Mentor
+          </h2>
+          <p className="text-slate-600 mb-6">
+            Please log in to access your financial dashboard.
+          </p>
+          <button
+            onClick={() => navigate("/login")}
+            className="btn-primary w-full py-3 font-semibold shadow-lg shadow-primary-500/20 hover:shadow-primary-500/40 transition-all duration-300"
+          >
+            Log In
+          </button>
         </div>
       </section>
     );
