@@ -84,6 +84,7 @@ function Home() {
           transactions: transactionsResponse.data.slice(0, 10),
         });
         setLoading(false);
+        console.log("testing")
       } catch (err) {
         console.error("Error fetching financial data:", err);
         if (err.response?.status === 401) {
