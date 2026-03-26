@@ -1,6 +1,12 @@
 import InsurancePolicy from '../models/InsurancePolicyModel.js';
 import Users from '../models/userModel.js';
 import { generateInsuranceRecommendation } from '../services/insuranceRecommendationService.js';
+/**
+ * Creates a new insurance policy record for the user.
+ * 
+ * @param {Object} req - Express request object with policy data.
+ * @param {Object} res - Express response object.
+ */
 export const addInsurance = async (req, res) => {
   try {
     const policy = new InsurancePolicy({
