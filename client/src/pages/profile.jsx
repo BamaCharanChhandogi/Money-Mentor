@@ -89,14 +89,25 @@ const Profile = () => {
     }
   };
 
-  if (loading) return (
-    <div className="min-h-screen bg-mesh flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary-500 border-t-transparent mx-auto mb-4"></div>
-        <p className="text-slate-600 font-medium">Loading your profile...</p>
+if (loading) {
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-mesh">
+      
+      <div className="text-center space-y-4">
+        
+        {/* Loader */}
+        <div className="w-16 h-16 mx-auto border-4 rounded-full animate-spin border-primary-500 border-t-transparent" />
+
+        {/* Message */}
+        <p className="font-medium text-slate-600">
+          Loading your profile...
+        </p>
+
       </div>
+
     </div>
   );
+}
 
   if (error) return (
     <div className="min-h-screen bg-mesh flex items-center justify-center">

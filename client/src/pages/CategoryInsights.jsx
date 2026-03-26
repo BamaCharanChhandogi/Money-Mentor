@@ -34,12 +34,23 @@ const CategoryInsights = () => {
   }, []);
 
   // Format data for chart
-  const chartData = categoryInsights.map(insight => ({
-    name: insight._id || 'Uncategorized',
-    totalSpend: insight.totalSpend,
-    transactionCount: insight.transactionCount,
-    averageAmount: insight.averageTransactionAmount
-  })).sort((a, b) => b.totalSpend - a.totalSpend);
+const chartData = categoryInsights
+  .map((insight) => {
+    const {
+      _id,
+      totalSpend,
+      transactionCount,
+      averageTransactionAmount,
+    } = insight;
+
+    return {
+      name: _id || "Uncategorized",
+      totalSpend,
+      transactionCount,
+      averageAmount: averageTransactionAmount,
+    };
+  })
+  .sort((a, b) => b.totalSpend - a.totalSpend);
 
   const totalSpend = chartData.reduce((sum, item) => sum + item.totalSpend, 0);
 

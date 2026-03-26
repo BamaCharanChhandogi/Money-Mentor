@@ -31,29 +31,29 @@ function Contact() {
     }, 3000);
   };
 
-  const contactInfo = [
-    {
-      icon: Mail,
-      title: "Email Us",
-      value: "support@moneymentor.com",
-      description: "We'll respond within 24 hours",
-      gradient: "from-blue-500 to-blue-700"
-    },
-    {
-      icon: Phone,
-      title: "Call Us",
-      value: "+1 (234) 567-890",
-      description: "Mon-Fri, 9AM-6PM EST",
-      gradient: "from-emerald-500 to-emerald-700"
-    },
-    {
-      icon: MapPin,
-      title: "Visit Us",
-      value: "123 Finance Street",
-      description: "New York, NY 10001",
-      gradient: "from-purple-500 to-purple-700"
-    }
-  ];
+ const contactInfo = [
+  {
+    title: "Email Us",
+    icon: Mail,
+    value: "support@moneymentor.com",
+    description: "We'll respond within 24 hours",
+    gradient: "from-blue-500 to-blue-700",
+  },
+  {
+    title: "Call Us",
+    icon: Phone,
+    value: "+1 (234) 567-890",
+    description: "Mon-Fri, 9AM-6PM EST",
+    gradient: "from-emerald-500 to-emerald-700",
+  },
+  {
+    title: "Visit Us",
+    icon: MapPin,
+    value: "123 Finance Street",
+    description: "New York, NY 10001",
+    gradient: "from-purple-500 to-purple-700",
+  },
+];
 
   return (
     <div className="min-h-screen bg-mesh py-16">
