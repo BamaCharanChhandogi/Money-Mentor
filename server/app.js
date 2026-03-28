@@ -6,6 +6,7 @@ import { Server } from 'socket.io';
 import dbConnection from './dbConfig/index.js';
 import routes from './routes/index.js';
 import { socketMiddleware } from './middleware/socketMiddleware.js';
+import { setupMcpServer } from './mcp/mcpServer.js';
 import jwt from 'jsonwebtoken'; // Make sure to install jsonwebtoken
 
 dotenv.config();
@@ -102,6 +103,9 @@ io.on('connection', (socket) => {
     });
   });
 });
+
+// Initialize MCP Server endpoints
+setupMcpServer(app);
 
 app.use(routes);
 
