@@ -684,29 +684,48 @@ export { server };
 // --- Server Integration ---
 // Export a setup function to attach the SSE endpoint inside app.js
 export const setupMcpServer = (app) => {
-  let transport;
+  // Use a Map to handle multiple sessions (better for remote use)
+  const transports = new Map();
 
-  // Endpoint for MCP Clients (OpenClaw) to connect to via Server-Sent Events
+  // Endpoint for MCP Clients (OpenClaw/Claude) to connect via SSE
   app.get("/mcp/sse", async (req, res) => {
     try {
-      transport = new SSEServerTransport("/mcp/messages", res);
+      // Create a unique transport for this connection
+      // We point it to /mcp/messages for the POST communication
+      const transport = new SSEServerTransport("/mcp/messages", res);
+      
+      const sessionID = Math.random().toString(36).substring(7);
+      transports.set(sessionID, transport);
+
       await server.connect(transport);
+
+      // Clean up when connection closes
+      req.on('close', () => {
+        transports.delete(sessionID);
+      });
     } catch (error) {
       console.error("Error setting up MCP SSE Transport:", error);
+      if (!res.headersSent) res.status(500).send("Internal Server Error");
     }
   });
 
-  // Endpoint for exchanging JSON-RPC messages with the Client
+  // IMPORTANT: Handle POST to /mcp/sse as a fallback
+  // Some clients (like mcp-remote) might try to POST here 
+  app.post("/mcp/sse", async (req, res) => {
+     // Forward to the main message handler
+     return app._router.handle(req, res, () => {});
+  });
+
+  // Main Endpoint for exchanging JSON-RPC messages with the Client
   app.post("/mcp/messages", async (req, res) => {
-    if (!transport) {
-      console.error("Attempted to send MCP message without active transport connection.");
-      return res.status(500).send("No MCP transport connected. Please connect to /mcp/sse first.");
-    }
     try {
-      await transport.handlePostMessage(req, res);
+      // The SSEServerTransport class handles finding the correct session 
+      // automatically if headers are set correctly.
+      const sessionId = req.query.sessionId;
+      await SSEServerTransport.handlePostMessage(req, res);
     } catch (error) {
        console.error("MCP handle message error:", error);
-       res.status(500).send("Error handling message");
+       if (!res.headersSent) res.status(500).send("Error handling message");
     }
   });
 };
