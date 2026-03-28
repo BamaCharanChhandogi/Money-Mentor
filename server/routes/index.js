@@ -13,6 +13,7 @@ import transactionCategorization from '../routes/TransactionCategorization.js';
 import familyGroupRoutes from './familyGroupRoutes.js';
 import sharedExpenseRoutes from './sharedExpenseRoutes.js';
 import goalRoutes from './goalRoutes.js';
+import shadowRoutes from './shadowRoutes.js';
 const router = express.Router();
 
 router.use("/api/auth",authRoutes);
@@ -29,5 +30,6 @@ router.use('/api',transactionCategorization );
 router.use('/api/family-groups', familyGroupRoutes);
 router.use('/api/shared-expenses', sharedExpenseRoutes);
 router.use('/api/goals', goalRoutes);
+router.use('/api/shadow', shadowRoutes);
 
 export default router;
