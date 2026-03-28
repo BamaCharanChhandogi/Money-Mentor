@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { UserCircle, Menu, X, Wallet, TrendingUp, Home, Info, Briefcase, Mail } from "lucide-react";
+import { UserCircle, Menu, X, Wallet, TrendingUp, Home, Info, Briefcase, Mail, Bot } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +14,7 @@ const Navbar = () => {
     { path: "/", label: "Home", icon: Home },
     { path: "/about", label: "About", icon: Info },
     { path: "/service", label: "Services", icon: Briefcase },
+    { path: "/ai-tools", label: "AI Tools", icon: Bot },
     { path: "/contact", label: "Contact", icon: Mail },
   ];
 

@@ -23,6 +23,7 @@ import FamilyDashboard from "./components/Family/FamilyDashboard";
 import FamilyLanding from "./components/Family/FamilyLanding";
 import CreateFamily from "./components/Family/CreateFamily";
 import JoinFamily from "./pages/JoinFamily";
+import AiTools from "./pages/AiTools";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           <Route path="/financial-advice" element={<FinancialAdvice />} />
           <Route path="/expense-analysis" element={<ExpenseAnalysis />} />
           <Route path="/budget-adherence" element={<BudgetAdherence />} />
+          <Route path="/ai-tools" element={<AiTools />} />
         </Routes>
       </div>
       <Chatbot />
