@@ -1,0 +1,12 @@
+name = "money-mentor-mcp"
+main = "src/index.js"
+compatibility_date = "2024-11-20"
+compatibility_flags = ["nodejs_compat_v2"]
+
+[vars]
+# Must match the DB Mongoose uses. If MONGO_URI has no path segment, Mongoose defaults to "test" (not MoneyMentor).
+MONGO_URI = "mongodb+srv://bama:XwBYXCAzmjbUnFz2@cluster0.ksbnq.mongodb.net"
+MONGO_DATABASE = "test"
+PLAID_CLIENT_ID = "66c42985f09688001a5a8efe"
+PLAID_SECRET = "353e9a2dea4565fa8f584919c3f507"
+PLAID_ENV = "sandbox"
