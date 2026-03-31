@@ -24,6 +24,7 @@ import FamilyLanding from "./components/Family/FamilyLanding";
 import CreateFamily from "./components/Family/CreateFamily";
 import JoinFamily from "./pages/JoinFamily";
 import AiTools from "./pages/AiTools";
+import AIShadowDashboard from "./components/AIShadow/AIShadowDashboard";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
           <Route path="/family/manage" element={<FamilyDashboard />} />
           <Route path="/join-family" element={<JoinFamily />} />
           <Route path="/ai-dashboard" element={<Dashboard />} />
+          <Route path="/ai-shadow" element={<AIShadowDashboard />} />
           <Route path="/financial-advice" element={<FinancialAdvice />} />
           <Route path="/expense-analysis" element={<ExpenseAnalysis />} />
           <Route path="/budget-adherence" element={<BudgetAdherence />} />
