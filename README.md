@@ -1,51 +1,66 @@
-# Project title
-Money-Mentor
+# Money Mentor
 
-# Team members with roll numbers
-- Karandeep Kaur - 2210991750
-- Bama Charan Chandogi - 2210991436
-- Aryan Kaushal - 2210991382
-- Himanshu Joshi - 2210991660
+## Team Members
+| Roll Number  | Name                  |
+|--------------|-----------------------|
+| 2210991750   | Karandeep Kaur        |
+| 2210991436   | Bama Charan Chhandogi |
+| 2210991382   | Aryan Kaushal         |
+| 2210991660   | Himanshu Joshi        |
 
-# Software/platform used
-- **Frontend Platform:** Vite
-- **Backend Platform:** Node.js
-- **Database:** MongoDB
-- **Operating System:** Windows/macOS/Linux
+## Project Type
+Research
 
-# Programming language used
-- JavaScript (React.js for frontend, Node.js for backend)
+## Description
+Money Mentor is a full-stack financial management web application that helps users track expenses, analyze spending patterns, and make better financial decisions. It features real-time budget tracking, a dynamic financial health score, categorized expense reports, investment portfolio insights, AI-powered financial advice (via Google Gemini), and family expense sharing — all through an interactive, personalized dashboard.
 
-# Steps to run the code
-1. **Clone the repository:**
-   ```bash
-   git clone  https://github.com/BamaCharanChhandogi/Money-Mentor
-   ```
-2. **Environment Setup:**
-   - Navigate to the backend server folder: `cd source_code/server`
-   - Create a `.env` file with necessary environment variables (`PORT`, `CLIENT_URL`, `MONGO_URI`, `JWT_SECRET`, `EMAIL`, `EMAIL_PASSWORD`, `PLAID_CLIENT_ID`, `PLAID_SECRET`, `PLAID_ENV`, `PLAID_PRODUCTS`, `PLAID_COUNTRY_CODE`, `GEMINI_API_KEY`).
-3. **Run the Application:**
+## Tech Stack
+- **Frontend:** React.js (Vite) + Tailwind CSS
+- **Backend:** Node.js / Express.js
+- **Database:** MongoDB (Mongoose)
+- **AI:** Google Generative AI (Gemini)
+- **Banking:** Plaid API
+- **Real-time:** Socket.io
 
-   **Using the provided scripts (Recommended):**
-   - **Windows:** Double-click or run `run.bat` in the root directory.
-   - **macOS/Linux:** Run the shell script by executing `bash run.sh` in the terminal.
+## Folder Structure
+```
+Money-Mentor/
+├── IPR Submission Proof/   # IPR proof documents (PDF + screenshots)
+├── Report and PPT/         # Final report and presentation
+├── Source code/             # Application source code
+│   ├── client/             #   React frontend
+│   └── server/             #   Express backend
+└── README.md
+```
 
-   **Manual Setup (Alternative):**
-   - **Backend:**
-     - Navigate to the server folder: `cd source_code/server`
-     - Install dependencies: `npm install`
-     - Run the server: `npm start` (Runs on `http://localhost:5000`)
-   - **Frontend:**
-     - Navigate to the client folder: `cd source_code/client`
-     - Install dependencies: `npm install`
-     - Run the client: `npm run dev` (Runs on `http://localhost:5173`)
-4. **Access the application:** Open `http://localhost:5173` in your web browser.
+## How to Run
 
-# Required libraries/tools
-- **Frontend Libraries:** React.js, Tailwind CSS, Recharts, React Router DOM, React-Redux, Socket.io-client, Axios, Flowbite-React, Lucide-React.
-- **Backend Libraries:** Express.js, Mongoose (MongoDB), JSONWebToken (JWT), Bcrypt, Socket.io, Plaid API, Google Generative AI (Gemini).
-- **Tools:** npm, Node.js, Git.
+### Prerequisites
+- Node.js (v18+)
+- npm
+- MongoDB instance (local or Atlas)
 
-# Input and expected output
-- **Input:** User financial details such as income, daily expenses, budget limits, linking external bank accounts via Plaid API, and setting financial goals.
-- **Expected Output:** An interactive and personalized financial dashboard featuring real-time budget tracking, dynamic financial health scoring, detailed categorized expense reports, investment portfolio updates, and calculated shared family expenses.
+### Backend (Server)
+```bash
+cd "Source code/server"
+npm install
+# Create a .env file with: PORT, CLIENT_URL, MONGO_URI, JWT_SECRET,
+# EMAIL, EMAIL_PASSWORD, PLAID_CLIENT_ID, PLAID_SECRET, PLAID_ENV,
+# PLAID_PRODUCTS, PLAID_COUNTRY_CODE, GEMINI_API_KEY
+npm start
+```
+Server runs on `http://localhost:5000`
+
+### Frontend (Client)
+```bash
+cd "Source code/client"
+npm install
+npm run dev
+```
+Client runs on `http://localhost:5173`
+
+## Current Status
+✅ Completed
+
+## Deployment
+🔗 [https://money-mentor-wheat.vercel.app/](https://money-mentor-wheat.vercel.app/)
