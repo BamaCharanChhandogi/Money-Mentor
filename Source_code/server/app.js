@@ -12,30 +12,53 @@ dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : null,
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://money-mentor-wheat.vercel.app'
+].filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin) || allowedOrigins.includes(origin.replace(/\/$/, ''))) {
+      return callback(null, true);
+    }
+    if (/^https:\/\/.*\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+};
+
 const io = new Server(httpServer, {
-  cors: {
-    origin: [
-      process.env.CLIENT_URL,
-      'http://localhost:5173',
-      'https://money-mentor-wheat.vercel.app'
-    ],
-    methods: ["GET", "POST"],
-    credentials: true
-  }
+  cors: corsOptions
 });
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 dbConnection();
 app.use(express.json());
-app.use(cors({
-  origin: [
-    process.env.CLIENT_URL, 
-    'http://localhost:5173',  // Keep local development option
-    'https://money-mentor-wheat.vercel.app'
-  ],
-  credentials: true
-}));
+app.use(cors(corsOptions));
+
+// Health check and root route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'Money-Mentor API',
+    renderUrl: 'https://money-mentor-lhg2.onrender.com',
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', uptime: process.uptime() });
+});
+
 
 // Enhanced Socket.IO connection handling with authentication
 io.use((socket, next) => {

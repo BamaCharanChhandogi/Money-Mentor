@@ -1,9 +1,15 @@
 import axios from "axios";
 
+export const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL ||
+  (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:5000'
+    : 'https://money-mentor-lhg2.onrender.com');
+
 export const BASE_URL =
-  typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://localhost:5000/api'
-    : 'https://money-mentor-1f1e.onrender.com/api';
+  import.meta.env.VITE_API_URL ||
+  `${BACKEND_URL}/api`;
+
 const token = localStorage.getItem('token');
 
 export const login = async (email, password) => {
