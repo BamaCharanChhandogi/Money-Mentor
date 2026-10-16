@@ -17,7 +17,8 @@ const allowedOrigins = [
   process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : null,
   'http://localhost:5173',
   'http://localhost:3000',
-  'https://money-mentor-wheat.vercel.app'
+  'https://money-mentor-wheat.vercel.app',
+  'https://moneymentor.bamacharan.com'
 ].filter(Boolean);
 
 const corsOptions = {
@@ -26,7 +27,7 @@ const corsOptions = {
     if (allowedOrigins.includes(origin) || allowedOrigins.includes(origin.replace(/\/$/, ''))) {
       return callback(null, true);
     }
-    if (/^https:\/\/.*\.vercel\.app$/.test(origin)) {
+    if (/^https:\/\/.*\.vercel\.app$/.test(origin) || /^https:\/\/.*\.bamacharan\.com$/.test(origin)) {
       return callback(null, true);
     }
     return callback(null, true);
