@@ -24,12 +24,15 @@ async function getDb(env) {
 }
 
 // --- HELPERS ---
-async function findUser(db, phone) {
-  if (!phone) throw new Error('A phone number is required.');
-  const user = await db.collection('users').findOne({ phone });
-  if (!user) throw new Error(`User not found with phone: ${phone}`);
+async function findUser(db, identifier) {
+  if (!identifier) throw new Error('A phone number or email is required.');
+  const user = await db.collection('users').findOne({
+    $or: [{ phone: identifier }, { email: identifier }]
+  });
+  if (!user) throw new Error(`User not found with phone/email: ${identifier}`);
   return user;
 }
+
 
 function ok(text) {
   return { content: [{ type: 'text', text }] };
@@ -421,7 +424,7 @@ async function handleToolCall(name, args, env) {
     const transactions = await db.collection('transactions').find({ userId: user._id }).sort({ date: -1 }).limit(limitVal).toArray();
     if (!transactions.length) return ok('No recent transactions found.');
     const history = transactions.map(t =>
-      `[${new Date(t.date).toLocaleDateString()}] $${t.amount} at ${t.merchantName || t.name} (Category: ${t.category ? t.category.join(', ') : 'Unknown'})`
+      `[${new Date(t.date).toLocaleDateString()}] $${t.amount} at ${t.merchantName || t.name} (Category: ${Array.isArray(t.category) ? t.category.join(', ') : (t.category || 'Unknown')})`
     ).join('\n');
     return ok(`Recent Transactions:\n${history}`);
   }

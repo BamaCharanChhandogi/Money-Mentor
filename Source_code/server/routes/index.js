@@ -14,6 +14,7 @@ import familyGroupRoutes from './familyGroupRoutes.js';
 import sharedExpenseRoutes from './sharedExpenseRoutes.js';
 import goalRoutes from './goalRoutes.js';
 import shadowRoutes from './shadowRoutes.js';
+import mcpRoutes from './mcpRoutes.js';
 const router = express.Router();
 
 router.use("/api/auth",authRoutes);
@@ -31,5 +32,8 @@ router.use('/api/family-groups', familyGroupRoutes);
 router.use('/api/shared-expenses', sharedExpenseRoutes);
 router.use('/api/goals', goalRoutes);
 router.use('/api/shadow', shadowRoutes);
+router.use('/api/mcp', mcpRoutes);
+router.use('/mcp', mcpRoutes);
 
 export default router;
+
